@@ -8,7 +8,7 @@
 </head>
 
 <body>
-	<div id="stage"></div>
+	<div id="stage" style="background-color:#ccc;">Hey chorr, I need canvas module!</div>
 	<div id="toolbar">
 		<a id="colorPicker" href="javascript:;"></a>
 		<input type="radio" id="radioPencil" name="mode" value="pencil" checked="checked" />
