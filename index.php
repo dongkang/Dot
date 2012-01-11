@@ -19,5 +19,7 @@
 		<button type="button" id="btnRedo">REDO</button>
 		<button type="button" id="btnMenu">MENU</button>
 	</div>
+
+	<script src="./static/jquery.min.js" type="text/javascript"></script>
 </body>
 </html>
