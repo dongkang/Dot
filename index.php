@@ -27,6 +27,13 @@
 		<a href="javascript:;" class="color-item color-blue"></a>
 		<a href="javascript:;" class="color-item color-purple"></a>
 	</div>
+	<div id="layer-menu">
+		<button type="button" id="btnRemove">REMOVE</button>
+		<button type="button" id="btnFlickr">FLICKR</button>
+		<button type="button" id="btnFacebook">FACEBOOK</button>
+		<button type="button" id="btnTwitter">TWITTER</button>
+		<button type="button" id="btnSave">SAVE</button>
+	</div>
 
 	<script src="./static/jquery.min.js" type="text/javascript"></script>
 	<script src="./static/script.js" type="text/javascript"></script>
