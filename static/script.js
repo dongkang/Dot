@@ -37,7 +37,14 @@ $(document).ready(function() {
 	});
 
 	// show menu
-	$("#btnMenu").click(function() {
-		console.log("show menu!");
+	$("#btnMenu").toggle(function() {
+		var layer = $("#layer-menu");
+		var offset = layer.offset().top - $("#toolbar").offset().top + layer.height();
+		layer.css("position", "relative");
+		layer.css("top", -offset+"px");
+	}, function() {
+		var layer = $("#layer-menu");
+		layer.css("position", "static");
+		layer.css("top", "auto");
 	});
 });
