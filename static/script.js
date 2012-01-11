@@ -10,8 +10,15 @@ $(document).ready(function() {
 	});
 
 	// handle colorPicker
-	$("#colorPicker").click(function() {
-		console.log("open colorPicker!")
+	$("#colorPicker").toggle(function() {
+		var layer = $("#layer-colorpicker");
+		var offset = layer.offset().top - $("#toolbar").offset().top + layer.height();
+		layer.css("position", "relative");
+		layer.css("top", -offset+"px");
+	}, function() {
+		var layer = $("#layer-colorpicker");
+		layer.css("position", "static");
+		layer.css("top", "auto");
 	});
 
 	// change mode
