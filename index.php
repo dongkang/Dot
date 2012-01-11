@@ -8,7 +8,16 @@
 </head>
 
 <body>
-
-
+	<div id="stage"></div>
+	<div id="toolbar">
+		<a id="colorPicker" href="javascript:;"></a>
+		<input type="radio" id="radioPencil" name="mode" value="pencil" checked="checked" />
+		<label for="radioPencil">PENCIL</label>
+		<input type="radio" id="radioHand" name="mode" value="hand" />
+		<label for="radioHand">HAND</label>
+		<button type="button" id="btnUndo">UNDO</button>
+		<button type="button" id="btnRedo">REDO</button>
+		<button type="button" id="btnMenu">MENU</button>
+	</div>
 </body>
 </html>
