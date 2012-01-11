@@ -35,7 +35,7 @@
 		<button type="button" id="btnSave">SAVE</button>
 	</div>
 
-	<script src="./static/jquery.min.js" type="text/javascript"></script>
+	<script src="./lib/jquery.min.js" type="text/javascript"></script>
 	<script src="./static/script.js" type="text/javascript"></script>
 </body>
 </html>
