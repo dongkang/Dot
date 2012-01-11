@@ -19,6 +19,14 @@
 		<button type="button" id="btnRedo">REDO</button>
 		<button type="button" id="btnMenu">MENU</button>
 	</div>
+	<div id="layer-colorpicker">
+		<a href="javascript:;" class="color-item color-red"></a>
+		<a href="javascript:;" class="color-item color-orange"></a>
+		<a href="javascript:;" class="color-item color-yellow"></a>
+		<a href="javascript:;" class="color-item color-green"></a>
+		<a href="javascript:;" class="color-item color-blue"></a>
+		<a href="javascript:;" class="color-item color-purple"></a>
+	</div>
 
 	<script src="./static/jquery.min.js" type="text/javascript"></script>
 	<script src="./static/script.js" type="text/javascript"></script>
