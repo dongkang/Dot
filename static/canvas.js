@@ -1,6 +1,7 @@
 var Canvas = Backbone.Model.extend({
 	defaults: {
 		pixel: [],
+		color: "#000000",
 		width: 32,
 		height: 32,
 		actualWidth: 288,
@@ -29,8 +30,12 @@ var Canvas = Backbone.Model.extend({
 			aX = Math.floor(x * ratio),
 			aY = Math.floor(y * ratio);
 
-		p[aX][aY] = p[aX][aY] ? null : "#000000";
+		p[aX][aY] = p[aX][aY] ? null : this.get("color");
 		this.trigger("canvas:update");
+	},
+
+	setColor: function(c) {
+		this.set({ color: c });
 	},
 
 	clearPixel: function() {
@@ -98,5 +103,14 @@ var CanvasView = Backbone.View.extend({
 	gesture: function(ev) {
 		var e = ev.originalEvent;
 		console.log("CanvasView.gesture() : " + e.scale + " / " + e.rotation);
+	},
+
+	color: function(c) {
+		c = c || "#000000";
+		this.model.setColor(c);
+	},
+
+	clear: function() {
+		this.model.clearPixel();
 	}
 });

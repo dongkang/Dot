@@ -16,10 +16,22 @@
 
 	<section id="app"></section>
 
+	<button class="clear">clear</button>
+	<button class="color">#000000</button>
+	<button class="color">#ff0000</button>
+	<button class="color">#00ff00</button>
+	<button class="color">#0000ff</button>
+
 	<script type="text/javascript">
-
-		var v = new CanvasView();
-
+	$(document).ready(function() {
+		window.v = new CanvasView();
+		$('button.clear').bind('click', function() {
+			v.clear();
+		});
+		$('button.color').bind('click', function() {
+			v.color(this.innerHTML);
+		});
+	});
 	</script>
 </body>
 </html>
