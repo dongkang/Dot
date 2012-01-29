@@ -1,50 +1,19 @@
-$(document).ready(function() {
-	// layout managing
-	var controlLayout = function(){
-		var stageHeight = window.innerHeight - $("#toolbar").height();
-		$("#stage").height(stageHeight);
-	};
-	controlLayout();
-	$(window).resize(function(){
-		controlLayout();
-	});
+window.Dot = {};
 
-	// handle colorPicker
-	$("#colorPicker").toggle(function() {
-		var layer = $("#layer-colorpicker");
-		var offset = layer.offset().top - $("#toolbar").offset().top + layer.height();
-		layer.css("position", "relative");
-		layer.css("top", -offset+"px");
-	}, function() {
-		var layer = $("#layer-colorpicker");
-		layer.css("position", "static");
-		layer.css("top", "auto");
-	});
+$.extend(window.Dot, {
 
-	// change mode
-	$("input[name=mode]").change(function() {
-		console.log("change mode!");
-	});
+    /* const variables */
+    MODE_DRAW: 'mode_draw',
+    MODE_VIEW: 'mode_view',
 
-	// undo action
-	$("#btnUndo").click(function() {
-		console.log("undo!");
-	});
+    /* attributes */
+    color: '#000000',
 
-	// redo action
-	$("#btnRedo").click(function() {
-		console.log("redo!");
-	});
+    initialize: function(){
+        //TODO: initialize application
+    }
+});
 
-	// show menu
-	$("#btnMenu").toggle(function() {
-		var layer = $("#layer-menu");
-		var offset = layer.offset().top - $("#toolbar").offset().top + layer.height();
-		layer.css("position", "relative");
-		layer.css("top", -offset+"px");
-	}, function() {
-		var layer = $("#layer-menu");
-		layer.css("position", "static");
-		layer.css("top", "auto");
-	});
+$(document).ready(function(){
+    window.Dot.initialize();
 });
