@@ -17,6 +17,7 @@
 	<section id="app"></section>
 
 	<button class="clear">clear</button>
+	<button class="grid">grid</button>
 	<button class="color">#000000</button>
 	<button class="color">#ff0000</button>
 	<button class="color">#00ff00</button>
@@ -25,11 +26,16 @@
 	<script type="text/javascript">
 	$(document).ready(function() {
 		window.v = new CanvasView();
+		window.grid = v.model.get('grid');
+
 		$('button.clear').bind('click', function() {
-			v.clear();
+			v.model.clearPixel();
 		});
 		$('button.color').bind('click', function() {
-			v.color(this.innerHTML);
+			v.model.setColor(this.innerHTML);
+		});
+		$('button.grid').bind('click', function() {
+			v.model.setGridMode(grid = !grid);
 		});
 	});
 	</script>

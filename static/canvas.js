@@ -9,7 +9,9 @@ var Canvas = Backbone.Model.extend({
 		psize: {
 			width: 9,
 			height: 9
-		}
+		},
+		grid: true,
+		gridColor: "#eaeaea"
 	},
 
 	initialize: function() {
@@ -42,6 +44,11 @@ var Canvas = Backbone.Model.extend({
 		this.unset("pixel");
 		this.initPixel(this.get("width"), this.get("height"));
 		this.trigger("canvas:update");
+	},
+
+	setGridMode: function(b) {
+		this.set({ grid: b });
+		this.trigger("canvas:update");
 	}
 });
 
@@ -67,6 +74,7 @@ var CanvasView = Backbone.View.extend({
 		});
 		$(this.el).append(this.canvas);
 		$("#app").html(this.el);
+		this.render();
 
 		/* for PC Browser */
 		if (!this.hasTouchEvent) {
@@ -80,14 +88,28 @@ var CanvasView = Backbone.View.extend({
 
 	render: function() {
 		var p = this.model.get("pixel"),
-			psize = this.model.get("psize");
+			psize = this.model.get("psize"),
+			grid = this.model.get("grid"),
+			gridColor = this.model.get("gridColor"),
+			cx, cy, cw, ch;
 		
 		for (var x=0; x<p.length; x++) {
 			for (var y=0; y<p[x].length; y++) {
+				cx = x * psize.width, 
+				cy = y * psize.height, 
+				cw = psize.width, 
+				ch = psize.height;
+
+				if (grid) {
+					this.ctx.strokeStyle = gridColor;
+					this.ctx.strokeRect(cx, cy, cw, ch);
+				}
 				this.ctx.fillStyle = p[x][y] || "#ffffff";
-				this.ctx.fillRect(x * psize.width, y * psize.height, psize.width, psize.height);
+				this.ctx.fillRect(cx, cy, cw, ch);
 			}
 		}
+
+		return this;
 	},
 
 	draw: function(ev) {
@@ -103,14 +125,6 @@ var CanvasView = Backbone.View.extend({
 	gesture: function(ev) {
 		var e = ev.originalEvent;
 		console.log("CanvasView.gesture() : " + e.scale + " / " + e.rotation);
-	},
-
-	color: function(c) {
-		c = c || "#000000";
-		this.model.setColor(c);
-	},
-
-	clear: function() {
-		this.model.clearPixel();
 	}
+
 });
