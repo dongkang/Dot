@@ -7,15 +7,15 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 .bg_light {background-color:#e7e9e1;}
 .bg_dark {background-color:#b8b9b3;}
 .item {display:inline-block;overflow:hidden;width:62px;height:62px;cursor:pointer;}
-.ico_pencil {background:url('./images/btn_pencil.png') no-repeat center center;}
-.ico_hand {background:url('./images/btn_hand.png') no-repeat center center;}
-.ico_undo {background:url('./images/btn_undo.png') no-repeat center center;}
-.ico_redo {background:url('./images/btn_redo.png') no-repeat center center;}
-.ico_trash {background:url('./images/btn_trash.png') no-repeat center center;}
-.ico_upload {background:url('./images/btn_upload.png') no-repeat center center;}
-.ico_facebook {background:url('./images/btn_facebook.png') no-repeat center center;}
-.ico_twitter {background:url('./images/btn_twitter.png') no-repeat center center;}
-.ico_download {background:url('./images/btn_download.png') no-repeat center center;}
+.ico_pencil {background:url('../images/btn_pencil.png') no-repeat center center;}
+.ico_hand {background:url('../images/btn_hand.png') no-repeat center center;}
+.ico_undo {background:url('../images/btn_undo.png') no-repeat center center;}
+.ico_redo {background:url('../images/btn_redo.png') no-repeat center center;}
+.ico_trash {background:url('../images/btn_trash.png') no-repeat center center;}
+.ico_upload {background:url('../images/btn_upload.png') no-repeat center center;}
+.ico_facebook {background:url('../images/btn_facebook.png') no-repeat center center;}
+.ico_twitter {background:url('../images/btn_twitter.png') no-repeat center center;}
+.ico_download {background:url('../images/btn_download.png') no-repeat center center;}
 .ico_color {position:relative;}
 .ico_color span {position:absolute;left:16px;top:16px;width:30px;height:30px;background-color:#000;}
 .ico_color span span {position:absolute;left:5px;top:5px;width:20px;height:20px;background-color:#fff;}
