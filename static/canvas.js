@@ -2,14 +2,11 @@ var Canvas = Backbone.Model.extend({
 	defaults: {
 		pixel: [],
 		color: "#000000",
-		width: 32,
-		height: 32,
-		actualWidth: 288,
-		actualHeight: 288,
-		psize: {
-			width: 9,
-			height: 9
-		},
+		width: 16,
+		height: 16,
+		actualWidth: 295,
+		actualHeight: 295,
+		psize: {},
 		grid: true,
 		gridColor: "#eaeaea"
 	},
@@ -19,20 +16,28 @@ var Canvas = Backbone.Model.extend({
 	},
 
 	initPixel: function(w, h) {
-		var p = new Array(w);
+		var p = new Array(w),
+			psize = this.get('psize');
+
 		for (var i=0; i<w; i++) {
 			p[i] = new Array(h);
 		}
-		this.set({ pixel: p });
+		psize.width = this.get('actualWidth') / w;
+		psize.height = this.get('actualHeight') / h;
+
+		this.set({ 
+			pixel: p,
+			psize: psize
+		});
 	},
 
-	point: function(x, y) {
+	point: function(x, y, drag) {
 		var p = this.get('pixel'),
 			ratio = this.get("width") / this.get("actualWidth"),
 			aX = Math.floor(x * ratio),
 			aY = Math.floor(y * ratio);
 
-		p[aX][aY] = p[aX][aY] ? null : this.get("color");
+		p[aX][aY] = (p[aX][aY] && !drag) ? null : this.get("color");
 		this.trigger("canvas:update");
 	},
 
@@ -57,9 +62,13 @@ var CanvasView = Backbone.View.extend({
 	className: "canvas-wrap",
 	events: {
 		"touchstart canvas": 		"draw",
+		"touchmove canvas": 		"draw",
+		"touchend canvas": 			"draw",
 		"gesturechange canvas": 	"gesture" 
 	},
 	hasTouchEvent: ("ontouchstart" in window),
+	hasHold: false,
+	hasMove: false,
 
 	initialize: function() {
 		this.model = new Canvas;
@@ -79,6 +88,8 @@ var CanvasView = Backbone.View.extend({
 		/* for PC Browser */
 		if (!this.hasTouchEvent) {
 			this.events["mousedown canvas"] = "draw";
+			this.events["mousemove canvas"] = "draw";
+			this.events["mouseup canvas"] = "draw";
 		}
 		this.delegateEvents(this.events);
 
@@ -113,13 +124,46 @@ var CanvasView = Backbone.View.extend({
 	},
 
 	draw: function(ev) {
-		console.log('DRAW!');
-		var e = ev.originalEvent.touches ? ev.originalEvent.touches[0] : ev,
+		var e = (ev.originalEvent.touches && ev.originalEvent.touches[0]) ? 
+					ev.originalEvent.touches[0] : ev,
 			offset = $(this.canvas).offset(),
-			x = e.pageX - offset.left,
-			y = e.pageY - offset.top;
+			x = (e.pageX || this.lastX) - offset.left,
+			y = (e.pageY || this.lastY) - offset.top;
 
-		this.model.point(x, y);
+		ev.preventDefault();
+		ev.stopPropagation();
+		switch (ev.type) {
+			case "touchstart":
+			case "mousedown":
+				this.hasHold = true;
+				this.hasMove = false;
+				this.lastX = x;
+				this.lastY = y;
+
+				break;
+			case "touchmove":
+			case "mousemove":
+				this.lastX = x;
+				this.lastY = y;
+				if (this.hasHold) {
+					this.model.point(x, y, true);
+					this.hasMove = true;
+				}
+
+				break;
+			case "touchend":
+			case "mouseup":
+				if (!this.hasMove) {
+					this.model.point(x, y);
+				}
+				this.hasHold = false;
+				this.hasMove = false;
+
+				break;
+			default: return;
+		}
+
+		
 	},
 
 	gesture: function(ev) {
