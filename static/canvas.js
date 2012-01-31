@@ -36,7 +36,9 @@ var Canvas = Backbone.Model.extend({
 			ratio = this.get("width") / this.get("actualWidth"),
 			aX = Math.floor(x * ratio),
 			aY = Math.floor(y * ratio);
-
+		
+		if (p.length <= aX || p[0].length <= aY) return;
+		
 		p[aX][aY] = (p[aX][aY] && !drag) ? null : this.get("color");
 		this.trigger("canvas:update");
 	},
