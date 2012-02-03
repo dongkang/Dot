@@ -4,35 +4,50 @@ var Canvas = Backbone.Model.extend({
 		color: "#000000",
 		width: 16,
 		height: 16,
-		actualWidth: 295,
-		actualHeight: 295,
+		actualWidth: 280,
+		actualHeight: 280,
 		psize: {},
+		offset: {
+			x: 0,
+			y: 0
+		},
 		grid: true,
-		gridColor: "#eaeaea"
+		gridColor: "#eaeaea",
+		stepSize: 10
 	},
 
-	initialize: function() {
-		this.initPixel(this.get("width"), this.get("height"));
+	initialize: function(options) {
+		if (options) {
+			this.set("actualWidth", options.width);
+			this.set("actualHeight", options.height);
+		}
+		this.initPixel();
 	},
 
-	initPixel: function(w, h) {
-		var p = new Array(w),
-			psize = this.get('psize');
+	initPixel: function() {
+		var w = this.get("width"),
+			h = this.get("height"),
+			p = new Array(w);
 
 		for (var i=0; i<w; i++) {
 			p[i] = new Array(h);
 		}
-		psize.width = this.get('actualWidth') / w;
-		psize.height = this.get('actualHeight') / h;
 
 		this.set({ 
 			pixel: p,
-			psize: psize
+			psize: this.calcPixelSize()
 		});
 	},
 
+	calcPixelSize: function() {
+		var psize = {};
+		psize.width = this.get("actualWidth") / this.get("width");
+		psize.height = this.get("actualHeight") / this.get("height");
+		return psize;
+	},
+
 	point: function(x, y, drag) {
-		var p = this.get('pixel'),
+		var p = this.get("pixel"),
 			ratio = this.get("width") / this.get("actualWidth"),
 			aX = Math.floor(x * ratio),
 			aY = Math.floor(y * ratio);
@@ -56,6 +71,29 @@ var Canvas = Backbone.Model.extend({
 	setGridMode: function(b) {
 		this.set({ grid: b });
 		this.trigger("canvas:update");
+	},
+
+	scale: function(s) {
+		var aw = this.get("actualWidth"),
+			ah = this.get("actualHeight"),
+			ssize = this.get("stepSize"),
+			pm = s > 0 ? 1 : -1;
+
+		this.set({
+			actualWidth: aw + (ssize * pm),
+			actualHeight: ah + (ssize * pm)
+		});
+		this.set("psize", this.calcPixelSize());
+		this.move((ssize * pm) / -2, (ssize * pm) / -2);
+		this.trigger("canvas:update");
+	},
+
+	move: function(x, y) {
+		var o = this.get("offset");
+		this.set("offset", {
+			x: o.x + x,
+			y: o.y + y
+		});
 	}
 });
 
@@ -104,12 +142,13 @@ var CanvasView = Backbone.View.extend({
 			psize = this.model.get("psize"),
 			grid = this.model.get("grid"),
 			gridColor = this.model.get("gridColor"),
+			offset = this.model.get("offset"),
 			cx, cy, cw, ch;
 		
 		for (var x=0; x<p.length; x++) {
 			for (var y=0; y<p[x].length; y++) {
-				cx = x * psize.width, 
-				cy = y * psize.height, 
+				cx = x * psize.width + offset.x, 
+				cy = y * psize.height + offset.y, 
 				cw = psize.width, 
 				ch = psize.height;
 
@@ -129,8 +168,8 @@ var CanvasView = Backbone.View.extend({
 		var e = (ev.originalEvent.touches && ev.originalEvent.touches[0]) ? 
 					ev.originalEvent.touches[0] : ev,
 			offset = $(this.canvas).offset(),
-			x = (e.pageX || this.lastX) - offset.left,
-			y = (e.pageY || this.lastY) - offset.top;
+			x = (e.pageX || this.lastX) - offset.left - this.model.get("offset").x,
+			y = (e.pageY || this.lastY) - offset.top - this.model.get("offset").y;
 
 		ev.preventDefault();
 		ev.stopPropagation();

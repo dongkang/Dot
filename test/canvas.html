@@ -16,12 +16,17 @@
 
 	<section id="app"></section>
 
-	<button class="clear">clear</button>
-	<button class="grid">grid</button>
-	<button class="color">#000000</button>
-	<button class="color">#ff0000</button>
-	<button class="color">#00ff00</button>
-	<button class="color">#0000ff</button>
+	<div>
+		<button class="zoom out">-</button>
+		<input type="range" class="zoom" value="0" min="-10" max="10" />
+		<button class="zoom in">+</button>
+		<button class="clear">clear</button>
+		<button class="grid">grid</button>
+		<button class="color">#000000</button>
+		<button class="color">#ff0000</button>
+		<button class="color">#00ff00</button>
+		<button class="color">#0000ff</button>
+	</div>
 
 	<script type="text/javascript">
 	$(document).ready(function() {
@@ -37,6 +42,21 @@
 		$('button.grid').bind('click', function() {
 			v.model.setGridMode(grid = !grid);
 		});
+
+		$('input.zoom').bind('change', function(ev) {
+			var val = $(ev.target).val();
+			v.model.scale(val);
+			$(ev.target).val(0);
+		});
+
+		$('button.zoom').bind('click', function(ev) {
+			if (ev.target.className == "zoom out") {
+				v.model.scale(-1);
+			} else {
+				v.model.scale(1);
+			}
+		});
+
 	});
 	</script>
 </body>
