@@ -20,8 +20,10 @@
 		<button class="zoom out">-</button>
 		<input type="range" class="zoom" value="0" min="-10" max="10" />
 		<button class="zoom in">+</button>
+		<input type="checkbox" id="hand" class="hand" /><label for="hand">hand</label>
 		<button class="clear">clear</button>
 		<button class="grid">grid</button>
+		<br/>
 		<button class="color">#000000</button>
 		<button class="color">#ff0000</button>
 		<button class="color">#00ff00</button>
@@ -55,6 +57,10 @@
 			} else {
 				v.model.scale(1);
 			}
+		});
+
+		$('input.hand').bind('change', function(ev) {
+			v.model.setHandMode($(this).is(":checked"));
 		});
 
 	});

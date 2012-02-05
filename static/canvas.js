@@ -1,3 +1,8 @@
+var CanvasMode = {
+	"DRAW": "draw",
+	"HAND": "hand"
+};
+
 var Canvas = Backbone.Model.extend({
 	defaults: {
 		pixel: [],
@@ -13,7 +18,8 @@ var Canvas = Backbone.Model.extend({
 		},
 		grid: true,
 		gridColor: "#eaeaea",
-		stepSize: 10
+		stepSize: 10,
+		mode: CanvasMode.DRAW
 	},
 
 	initialize: function(options) {
@@ -69,8 +75,14 @@ var Canvas = Backbone.Model.extend({
 	},
 
 	setGridMode: function(b) {
-		this.set({ grid: b });
+		this.set("grid", b);
 		this.trigger("canvas:update");
+	},
+
+	setHandMode: function(b) {
+		var mode = b ? CanvasMode.HAND : CanvasMode.DRAW;
+		this.set("mode", mode);
+		this.trigger("canvas:modechange", mode);
 	},
 
 	scale: function(s) {
@@ -113,13 +125,16 @@ var CanvasView = Backbone.View.extend({
 	initialize: function() {
 		this.model = new Canvas;
 		this.model.bind("canvas:update", this.render, this);
+		this.model.bind("canvas:modechange", this.cursorChange, this);
 
-		this.canvas = document.createElement('canvas');
+		this.$canvas = $("<canvas></canvas>");
+		this.canvas = this.$canvas[0];
 		this.ctx = this.canvas.getContext('2d');
 
-		$(this.canvas).attr({ 
+		this.$canvas.attr({ 
 			width: this.model.get("actualWidth"), 
-			height: this.model.get("actualHeight")
+			height: this.model.get("actualHeight"),
+			style: "cursor:crosshair"
 		});
 		$(this.el).append(this.canvas);
 		$("#app").html(this.el);
@@ -134,7 +149,7 @@ var CanvasView = Backbone.View.extend({
 		this.delegateEvents(this.events);
 
 		/* debug */
-		$(this.canvas).css({ border: "1px solid #900" });
+		this.$canvas.css({ border: "1px solid #900" });
 	},
 
 	render: function() {
@@ -167,7 +182,7 @@ var CanvasView = Backbone.View.extend({
 	draw: function(ev) {
 		var e = (ev.originalEvent.touches && ev.originalEvent.touches[0]) ? 
 					ev.originalEvent.touches[0] : ev,
-			offset = $(this.canvas).offset(),
+			offset = this.$canvas.offset(),
 			x = (e.pageX || this.lastX) - offset.left - this.model.get("offset").x,
 			y = (e.pageY || this.lastY) - offset.top - this.model.get("offset").y;
 
@@ -210,6 +225,13 @@ var CanvasView = Backbone.View.extend({
 	gesture: function(ev) {
 		var e = ev.originalEvent;
 		console.log("CanvasView.gesture() : " + e.scale + " / " + e.rotation);
+	},
+
+	cursorChange: function(mode) {
+		var cs = mode == CanvasMode.HAND ? "-webkit-grab" : "crosshair";
+		this.$canvas.css({ cursor: cs });
 	}
 
 });
+
+
