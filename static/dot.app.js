@@ -44,3 +44,24 @@ dot.Util = {
         return (b["mozilla"] ? "moz" : b["webkit"] ? "webkit" : b["opera"] ? "opera" : "").replace(/(.*)/, "-$1-");
     }
 };
+
+dot.Text = {
+    loc: "KO",
+    get: function(id) {
+        try {
+            return this[this.loc][id];
+        } catch(ex) {
+            return "???";
+        }
+    },
+    change: function(l) {
+        this.loc = l;
+    },
+
+    "KO": {
+        "C_CLEAR": "정말 삭제 하시겠습니까?"
+    },
+    "EN": {
+        "C_CLEAR": "Do you want clear?"
+    }
+};

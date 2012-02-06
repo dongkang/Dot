@@ -14,8 +14,8 @@ dot.Canvas = Backbone.Model.extend({
 		color: "#000000",
 		width: 16,
 		height: 16,
-		actualWidth: 280,
-		actualHeight: 280,
+		actualWidth: 320,
+		actualHeight: 320,
 		psize: {},
 		offset: {
 			x: 0,
@@ -32,10 +32,10 @@ dot.Canvas = Backbone.Model.extend({
 			this.set("actualWidth", options.width);
 			this.set("actualHeight", options.height);
 		}
-		this.initPixel();
+		this._initPixel();
 	},
 
-	initPixel: function() {
+	_initPixel: function() {
 		var w = this.get("width"),
 			h = this.get("height"),
 			p = new Array(w);
@@ -46,11 +46,11 @@ dot.Canvas = Backbone.Model.extend({
 
 		this.set({ 
 			pixel: p,
-			psize: this.calcPixelSize()
+			psize: this._calcPixelSize()
 		});
 	},
 
-	calcPixelSize: function() {
+	_calcPixelSize: function() {
 		var psize = {};
 		psize.width = this.get("actualWidth") / this.get("width");
 		psize.height = this.get("actualHeight") / this.get("height");
@@ -74,19 +74,21 @@ dot.Canvas = Backbone.Model.extend({
 		this.set({ color: c.toLowerCase() });
 	},
 
-	clearPixel: function() {
+	clearPixel: function(force) {
+		if (!force && !confirm(dot.Text.get("C_CLEAR"))) return;
 		this.unset("pixel");
-		this.initPixel(this.get("width"), this.get("height"));
+		this._initPixel(this.get("width"), this.get("height"));
 		this.trigger("canvas:update");
 	},
 
 	setGridMode: function(b) {
+		if (typeof b === "undefined") b = true;
 		this.set("grid", b);
 		this.trigger("canvas:update");
 	},
 
 	setHandMode: function(b) {
-		var mode = b ? dot.CANVAS_MODE.HAND : dot.CANVAS_MODE.DRAW;
+		var mode = (b || typeof b === "undefined") ? dot.CANVAS_MODE.HAND : dot.CANVAS_MODE.DRAW;
 		this.set("mode", mode);
 		this.trigger("canvas:modechange", mode);
 	},
@@ -101,9 +103,8 @@ dot.Canvas = Backbone.Model.extend({
 			actualWidth: aw + (ssize * pm),
 			actualHeight: ah + (ssize * pm)
 		});
-		this.set("psize", this.calcPixelSize());
+		this.set("psize", this._calcPixelSize());
 		this.move((ssize * pm) / -2, (ssize * pm) / -2);
-		this.trigger("canvas:update");
 	},
 
 	move: function(x, y) {
@@ -112,6 +113,17 @@ dot.Canvas = Backbone.Model.extend({
 			x: o.x + x,
 			y: o.y + y
 		});
+		this.trigger("canvas:update");
+	},
+
+	fit: function() {
+		this.set({
+			actualWidth: this.defaults.actualWidth,
+			actualHeight: this.defaults.actualHeight,
+			offset: { x: 0, y: 0 }
+		});
+		this.set("psize", this._calcPixelSize());
+		this.trigger("canvas:update");
 	}
 });
 
@@ -120,9 +132,9 @@ dot.CanvasView = Backbone.View.extend({
 	tagName: "div",
 	className: "canvas-wrap",
 	events: {
-		"touchstart canvas": 		"draw",
-		"touchmove canvas": 		"draw",
-		"touchend canvas": 			"draw",
+		"touchstart canvas": 		"handle",
+		"touchmove canvas": 		"handle",
+		"touchend canvas": 			"handle",
 		"gesturechange canvas": 	"gesture" 
 	},
 	hasTouchEvent: ("ontouchstart" in window),
@@ -149,14 +161,11 @@ dot.CanvasView = Backbone.View.extend({
 
 		/* for PC Browser */
 		if (!this.hasTouchEvent) {
-			this.events["mousedown canvas"] = "draw";
-			this.events["mousemove canvas"] = "draw";
-			this.events["mouseup canvas"] = "draw";
+			this.events["mousedown canvas"] = "handle";
+			this.events["mousemove canvas"] = "handle";
+			this.events["mouseup canvas"] = "handle";
 		}
 		this.delegateEvents(this.events);
-
-		/* debug */
-		this.$canvas.css({ border: "1px solid #900" });
 	},
 
 	render: function() {
@@ -167,6 +176,7 @@ dot.CanvasView = Backbone.View.extend({
 			offset = this.model.get("offset"),
 			cx, cy, cw, ch;
 		
+		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		for (var x=0; x<p.length; x++) {
 			for (var y=0; y<p[x].length; y++) {
 				cx = x * psize.width + offset.x, 
@@ -186,12 +196,12 @@ dot.CanvasView = Backbone.View.extend({
 		return this;
 	},
 
-	draw: function(ev) {
+	handle: function(ev) {
 		var e = (ev.originalEvent.touches && ev.originalEvent.touches[0]) ? 
 					ev.originalEvent.touches[0] : ev,
-			offset = this.$canvas.offset(),
-			x = (e.pageX || this.lastX) - offset.left - this.model.get("offset").x,
-			y = (e.pageY || this.lastY) - offset.top - this.model.get("offset").y;
+			o = this.model.get("offset"),
+			x = (e.pageX || this.lastX) - this.$canvas.offset().left,
+			y = (e.pageY || this.lastY) - this.$canvas.offset().top;
 
 		ev.preventDefault();
 		ev.stopPropagation();
@@ -202,31 +212,33 @@ dot.CanvasView = Backbone.View.extend({
 				this.hasMove = false;
 				this.lastX = x;
 				this.lastY = y;
-
 				break;
+
 			case "touchmove":
 			case "mousemove":
-				this.lastX = x;
-				this.lastY = y;
 				if (this.hasHold) {
-					this.model.point(x, y, true);
+					if (this.model.get("mode") == dot.CANVAS_MODE.DRAW) {
+						this.model.point(x - o.x, y - o.y, true);
+					} else if (this.model.get("mode") == dot.CANVAS_MODE.HAND) {
+						this.model.move(x - this.lastX, y - this.lastY);
+					}
 					this.hasMove = true;
 				}
-
+				this.lastX = x;
+				this.lastY = y;
 				break;
+
 			case "touchend":
 			case "mouseup":
-				if (!this.hasMove) {
-					this.model.point(x, y);
+				if (!this.hasMove && this.model.get("mode") == dot.CANVAS_MODE.DRAW) {
+					this.model.point(x - o.x, y - o.y);
 				}
 				this.hasHold = false;
 				this.hasMove = false;
-
 				break;
+
 			default: return;
 		}
-
-		
 	},
 
 	gesture: function(ev) {
