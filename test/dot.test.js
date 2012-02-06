@@ -8,14 +8,32 @@ describe("Utility", function() {
 
 		expect(dot.Util.cssPrefix()).toBe(p);
 	});
+	it("다국어 지원 텍스트를 가져온다.", function() {
+		dot.Text.change("KO");
+		expect(dot.Text.get("C_CLEAR")).toBe("정말 삭제 하시겠습니까?");
+		dot.Text.change("EN");
+		expect(dot.Text.get("C_CLEAR")).toBe("Do you want clear?");
+	});
 });
 
 describe("Canvas Model", function() {
-	var c = new dot.Canvas;
+	var c = new dot.Canvas;	// 16x16 사이즈 캔버스 생성
 
 	it("기본값(16x16)으로 초기화 된다", function() {
 		expect(c.get("width")).toBe(16);
 		expect(c.get("height")).toBe(16);
+	});
+
+	it("실사이즈(320px x 320px)으로 초기화 된다", function() {
+		expect(c.get("actualWidth")).toBe(320);
+		expect(c.get("actualHeight")).toBe(320);
+	});
+
+	it("그려진 데이터가 저장되고 있다.", function() {
+		c.point(0, 0);
+		expect(c.get("pixel")[0][0]).toBe("#000000");
+		c.point(319, 319);
+		expect(c.get("pixel")[15][15]).toBe("#000000");
 	});
 
 	it("브러쉬 색상이 변경 된다.", function() {
@@ -25,6 +43,34 @@ describe("Canvas Model", function() {
 		expect(c.get("color")).toBe("#aa00cc");
 		c.setColor("");
 		expect(c.get("color")).toBe("#000000");
+	});
+
+	it("데이터를 모두 삭제 한다.", function() {
+		var p, valid = null;
+		c.clearPixel(true);
+		p = c.get("pixel");
+		for (var x=0; x<16; x++) {
+			for (var y=0; y<16; y++) {
+				valid = p[x][y];
+			}
+		}
+		expect(valid).toBeFalsy();
+	});
+
+	it("그리드 상태를 변경 한다.", function() {
+		c.setGridMode(false);
+		expect(c.get("grid")).toBeFalsy();
+		c.setGridMode();
+		expect(c.get("grid")).toBeTruthy();
+	});
+
+	it("그리기, 움직이기 상태를 변경 한다.", function() {
+		expect(dot.CANVAS_MODE.DRAW).toBe("draw");
+		expect(dot.CANVAS_MODE.HAND).toBe("hand");
+		c.setHandMode();
+		expect(c.get("mode")).toBe(dot.CANVAS_MODE.HAND);
+		c.setHandMode(false);
+		expect(c.get("mode")).toBe(dot.CANVAS_MODE.DRAW);
 	});
 
 });

@@ -11,24 +11,36 @@
 
 	<script type="text/javascript" src="../static/dot.app.js"></script>
 	<script type="text/javascript" src="../static/dot.canvas.js"></script>
+
+	<style>
+	body {margin:0;padding:0;line-height:1.8;}
+	canvas {-webkit-box-shadow:0 2px 9px #aaa;}
+	#wrap {width:320px;margin: 10px auto 0;}
+	</style>
 </head>
 
 <body>
 
-	<section id="app"></section>
+	<div id="wrap">
+		<section id="app"></section>
 
-	<div>
-		<button class="zoom out">-</button>
-		<input type="range" class="zoom" value="0" min="-10" max="10" />
-		<button class="zoom in">+</button>
-		<input type="checkbox" id="hand" class="hand" /><label for="hand">hand</label>
-		<button class="clear">clear</button>
-		<button class="grid">grid</button>
-		<br/>
-		<button class="color">#000000</button>
-		<button class="color">#ff0000</button>
-		<button class="color">#00ff00</button>
-		<button class="color">#0000ff</button>
+		<div>
+			<button class="zoom out">-</button>
+			<input type="range" class="zoom" value="0" min="-10" max="10" />
+			<button class="zoom in">+</button>
+			<input type="checkbox" id="hand" class="hand" /><label for="hand">hand</label>
+			<br/>
+			<button class="clear">clear</button>
+			<button class="grid">grid</button>
+			<button class="fit">fit</button>
+			<button class="undo" disabled="disabled">undo</button>
+			<button class="redo" disabled="disabled">redo</button>
+			<br/>
+			<button class="color">#000000</button>
+			<button class="color">#ff0000</button>
+			<button class="color">#00ff00</button>
+			<button class="color">#0000ff</button>
+		</div>
 	</div>
 
 	<script type="text/javascript">
@@ -39,11 +51,17 @@
 		$('button.clear').bind('click', function() {
 			v.model.clearPixel();
 		});
+
 		$('button.color').bind('click', function() {
 			v.model.setColor(this.innerHTML);
 		});
+
 		$('button.grid').bind('click', function() {
 			v.model.setGridMode(grid = !grid);
+		});
+
+		$('button.fit').bind('click', function() {
+			v.model.fit();
 		});
 
 		$('input.zoom').bind('change', function(ev) {
