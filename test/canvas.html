@@ -68,6 +68,13 @@
 			v.model.fit();
 		});
 
+		$('button.undo').bind('click', function() {
+			v.model.undo();
+		});
+		v.model.bind('canvas:stack', function(disabled) {
+			$('button.undo').attr("disabled", disabled);
+		});
+
 		$('input.zoom').bind('change', function(ev) {
 			var val = $(ev.target).val();
 			v.model.scale(val);
@@ -76,9 +83,9 @@
 
 		$('button.zoom').bind('click', function(ev) {
 			if (ev.target.className == "zoom out") {
-				v.model.scale(-1);
+				v.model.scale(-3);
 			} else {
-				v.model.scale(1);
+				v.model.scale(3);
 			}
 		});
 

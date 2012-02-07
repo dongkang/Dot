@@ -24,7 +24,9 @@ dot.Canvas = Backbone.Model.extend({
 		grid: true,
 		gridColor: "#eaeaea",
 		stepSize: 10,
-		mode: dot.CANVAS_MODE.DRAW
+		mode: dot.CANVAS_MODE.DRAW,
+		undos: [],
+		undoSize: 5
 	},
 
 	initialize: function(options) {
@@ -32,6 +34,7 @@ dot.Canvas = Backbone.Model.extend({
 			this.set("actualWidth", options.width);
 			this.set("actualHeight", options.height);
 		}
+		this.on("change:pixel", this._stackDo);
 		this._initPixel();
 	},
 
@@ -57,15 +60,42 @@ dot.Canvas = Backbone.Model.extend({
 		return psize;
 	},
 
-	point: function(x, y, drag) {
+	_clonePixel: function() {
 		var p = this.get("pixel"),
+			bf = [];
+		for (var i=0, len=p.length; i<len; i++) {
+			bf[i] = _.clone(p[i]);
+		}
+		return bf;
+	},
+
+	_stackDo: function(model, val) {
+		var ud = this.get("undos");
+		if (this.previous("pixel").length <= 0) return;
+		
+		console.log('stack history', this.previous("pixel")[0][0]);
+		ud.push(this.previous("pixel"));
+		if (ud.length > this.get("undoSize")) {
+			delete ud[0];
+			ud.shift();
+		}
+		this.trigger("canvas:stack", false);
+	},
+
+	point: function(x, y, options) {
+		var drag = !!(options && options.drag),
+			ignore = options && options.ignore,
+			p = this._clonePixel(),
 			ratio = this.get("width") / this.get("actualWidth"),
 			aX = Math.floor(x * ratio),
 			aY = Math.floor(y * ratio);
-		
+
 		if (p.length <= aX || p[0].length <= aY) return;
 		
-		p[aX][aY] = (p[aX][aY] && !drag) ? null : this.get("color");
+		if (!ignore) {
+			p[aX][aY] = (p[aX][aY] && !drag) ? null : this.get("color");
+		}
+		this.set("pixel", p, { silent: drag });
 		this.trigger("canvas:update");
 	},
 
@@ -76,7 +106,7 @@ dot.Canvas = Backbone.Model.extend({
 
 	clearPixel: function(force) {
 		if (!force && !confirm(dot.Text.get("C_CLEAR"))) return;
-		this.unset("pixel");
+		this.unset("pixel", { silent: true });
 		this._initPixel(this.get("width"), this.get("height"));
 		this.trigger("canvas:update");
 	},
@@ -97,7 +127,8 @@ dot.Canvas = Backbone.Model.extend({
 		var aw = this.get("actualWidth"),
 			ah = this.get("actualHeight"),
 			ssize = this.get("stepSize"),
-			pm = s > 0 ? 1 : -1;
+			// pm = s > 0 ? 1 : -1;
+			pm = s;
 
 		this.set({
 			actualWidth: aw + (ssize * pm),
@@ -123,6 +154,14 @@ dot.Canvas = Backbone.Model.extend({
 			offset: { x: 0, y: 0 }
 		});
 		this.set("psize", this._calcPixelSize());
+		this.trigger("canvas:update");
+	},
+
+	undo: function() {
+		var ud = this.get("undos");
+		if (ud.length <= 0) return;
+		this.set("pixel", ud.pop(), { silent: true });
+		if (ud.length == 0) this.trigger("canvas:stack", true);
 		this.trigger("canvas:update");
 	}
 });
@@ -218,7 +257,7 @@ dot.CanvasView = Backbone.View.extend({
 			case "mousemove":
 				if (this.hasHold) {
 					if (this.model.get("mode") == dot.CANVAS_MODE.DRAW) {
-						this.model.point(x - o.x, y - o.y, true);
+						this.model.point(x - o.x, y - o.y, { drag:true });
 					} else if (this.model.get("mode") == dot.CANVAS_MODE.HAND) {
 						this.model.move(x - this.lastX, y - this.lastY);
 					}
@@ -230,8 +269,8 @@ dot.CanvasView = Backbone.View.extend({
 
 			case "touchend":
 			case "mouseup":
-				if (!this.hasMove && this.model.get("mode") == dot.CANVAS_MODE.DRAW) {
-					this.model.point(x - o.x, y - o.y);
+				if (this.model.get("mode") == dot.CANVAS_MODE.DRAW) {
+					this.model.point(x - o.x, y - o.y, { ignore:this.hasMove });
 				}
 				this.hasHold = false;
 				this.hasMove = false;
