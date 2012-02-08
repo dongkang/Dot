@@ -25,8 +25,8 @@ dot.Canvas = Backbone.Model.extend({
 		gridColor: "#eaeaea",
 		stepSize: 10,
 		mode: dot.CANVAS_MODE.DRAW,
-		undos: [],
-		undoSize: 5
+		history: [],
+		undoSize: 10
 	},
 
 	initialize: function(options) {
@@ -70,16 +70,30 @@ dot.Canvas = Backbone.Model.extend({
 	},
 
 	_stackDo: function(model, val) {
-		var ud = this.get("undos");
-		if (this.previous("pixel").length <= 0) return;
-		
-		console.log('stack history', this.previous("pixel")[0][0]);
-		ud.push(this.previous("pixel"));
-		if (ud.length > this.get("undoSize")) {
-			delete ud[0];
-			ud.shift();
+		var h = this.get("history");
+		if (this.previous("pixel").length <= 0 || this._ignoreStack) {
+			this._ignoreStack = false;
+			return;
 		}
-		this.trigger("canvas:stack", false);
+
+		if (h.index < h.length - 1) {
+			h.splice(h.index);
+		}
+		
+		h.push(this.previous("pixel"));
+		if (h.length > this.get("undoSize")) {
+			delete h[0];
+			h.shift();
+		}
+		h.index = h.length - 1;
+		this.set("history", h);
+		this.trigger("canvas:undo", false);
+		this.trigger("canvas:redo", true);
+	},
+
+	_clearHistory: function() {
+		this.set("history", new Array);
+		this.trigger("canvas:undo", true);
 	},
 
 	point: function(x, y, options) {
@@ -108,6 +122,7 @@ dot.Canvas = Backbone.Model.extend({
 		if (!force && !confirm(dot.Text.get("C_CLEAR"))) return;
 		this.unset("pixel", { silent: true });
 		this._initPixel(this.get("width"), this.get("height"));
+		this._clearHistory();
 		this.trigger("canvas:update");
 	},
 
@@ -158,10 +173,41 @@ dot.Canvas = Backbone.Model.extend({
 	},
 
 	undo: function() {
-		var ud = this.get("undos");
-		if (ud.length <= 0) return;
-		this.set("pixel", ud.pop(), { silent: true });
-		if (ud.length == 0) this.trigger("canvas:stack", true);
+		var h = this.get("history");
+		if (typeof h.index === "undefined") return;
+
+		this._ignoreStack = true;
+		if (h.index == h.length - 1) {
+			h.push(this.get("pixel"));
+		} else {
+			h.index--;
+		}
+		this.set("pixel", h[h.index]);
+
+		if (h.index == 0) this.trigger("canvas:undo", true);
+		this.trigger("canvas:redo", false);
+		this.trigger("canvas:update");
+	},
+
+	redo: function() {
+		var h = this.get("history");
+		if (typeof h.index === "undefined") return;
+
+		this._ignoreStack = true;
+		if (h.index < h.length - 1) {
+			h.index++;
+			this.set("pixel", h[h.index]);
+		} else {
+			return false;
+		}
+
+		if (h.index == h.length - 1) {
+			h.pop();
+			h.index--;
+			this.set("history", h);
+			this.trigger("canvas:redo", true);
+		}
+		this.trigger("canvas:undo", false);
 		this.trigger("canvas:update");
 	}
 });

@@ -46,7 +46,7 @@ dot.Util = {
 };
 
 dot.Text = {
-    loc: "KO",
+    loc: "ko",
     get: function(id) {
         try {
             return this[this.loc][id];
@@ -58,10 +58,12 @@ dot.Text = {
         this.loc = l;
     },
 
-    "KO": {
-        "C_CLEAR": "정말 삭제 하시겠습니까?"
+    "ko": {
+        "LANGUAGE": "언어",
+        "C_CLEAR": "정말 삭제 하시겠습니까?\n이 작업은 되돌릴 수 없습니다."
     },
-    "EN": {
-        "C_CLEAR": "Do you want clear?"
+    "en": {
+        "LANGUAGE": "Language",
+        "C_CLEAR": "Do you want clear?\nIt can't be restore!"
     }
 };
