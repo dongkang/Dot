@@ -71,8 +71,14 @@
 		$('button.undo').bind('click', function() {
 			v.model.undo();
 		});
-		v.model.bind('canvas:stack', function(disabled) {
+		v.model.bind('canvas:undo', function(disabled) {
 			$('button.undo').attr("disabled", disabled);
+		});
+		$('button.redo').bind('click', function() {
+			v.model.redo();
+		});
+		v.model.bind('canvas:redo', function(disabled) {
+			$('button.redo').attr("disabled", disabled);
 		});
 
 		$('input.zoom').bind('change', function(ev) {

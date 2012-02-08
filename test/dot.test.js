@@ -9,15 +9,19 @@ describe("Utility", function() {
 		expect(dot.Util.cssPrefix()).toBe(p);
 	});
 	it("다국어 지원 텍스트를 가져온다.", function() {
-		dot.Text.change("KO");
-		expect(dot.Text.get("C_CLEAR")).toBe("정말 삭제 하시겠습니까?");
-		dot.Text.change("EN");
-		expect(dot.Text.get("C_CLEAR")).toBe("Do you want clear?");
+		dot.Text.change("ko");
+		expect(dot.Text.get("LANGUAGE")).toBe("언어");
+		dot.Text.change("en");
+		expect(dot.Text.get("LANGUAGE")).toBe("Language");
 	});
 });
 
 describe("Canvas Model", function() {
 	var c = new dot.Canvas;	// 16x16 사이즈 캔버스 생성
+
+	beforeEach(function() {
+		c.setColor("");
+	});
 
 	it("기본값(16x16)으로 초기화 된다", function() {
 		expect(c.get("width")).toBe(16);
@@ -34,6 +38,8 @@ describe("Canvas Model", function() {
 		expect(c.get("pixel")[0][0]).toBe("#000000");
 		c.point(319, 319);
 		expect(c.get("pixel")[15][15]).toBe("#000000");
+		c.point(0, 0);
+		expect(c.get("pixel")[0][0]).toBeNull();
 	});
 
 	it("브러쉬 색상이 변경 된다.", function() {
@@ -71,6 +77,29 @@ describe("Canvas Model", function() {
 		expect(c.get("mode")).toBe(dot.CANVAS_MODE.HAND);
 		c.setHandMode(false);
 		expect(c.get("mode")).toBe(dot.CANVAS_MODE.DRAW);
+	});
+
+	it("undo, redo 실행하면 상태 복원을 한다.", function() {
+		c.clearPixel(true);
+		expect(c.get("history").length).toBe(0);
+
+		c.point(0, 0);
+		c.point(319, 319);
+		c.undo();
+		expect(c.get("pixel")[0][0]).toBe("#000000");
+		expect(c.get("pixel")[15][15]).toBeFalsy();
+		c.undo();
+		expect(c.get("pixel")[0][0]).toBeFalsy();
+		expect(c.get("pixel")[15][15]).toBeFalsy();
+		c.redo();
+		expect(c.get("pixel")[0][0]).toBe("#000000");
+		c.setColor("#ff0000");
+		c.point(319, 319);
+		expect(c.get("pixel")[15][15]).toBe("#ff0000");
+		c.undo(); 
+		c.redo(); 
+		c.redo();
+		expect(c.get("pixel")[15][15]).toBe("#ff0000");
 	});
 
 });
