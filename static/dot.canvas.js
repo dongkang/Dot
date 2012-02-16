@@ -96,6 +96,12 @@ dot.Canvas = Backbone.Model.extend({
 		this.trigger("canvas:undo", true);
 	},
 
+	_getImageData: function() {
+		if (typeof this.canvas === "undefined" || !("toDataURL" in this.canvas))
+			return false;
+		return this.canvas.toDataURL();
+	},
+
 	point: function(x, y, options) {
 		var drag = !!(options && options.drag),
 			ignore = options && options.ignore,
@@ -210,7 +216,12 @@ dot.Canvas = Backbone.Model.extend({
 		}
 		this.trigger("canvas:undo", false);
 		this.trigger("canvas:update");
+	},
+
+	export: function() {
+		window.open(this._getImageData());
 	}
+
 });
 
 /* 캔버스를 보여주고 컨트롤하는 뷰 */
@@ -233,7 +244,7 @@ dot.CanvasView = Backbone.View.extend({
 		this.model.bind("canvas:modechange", this.cursorChange, this);
 
 		this.$canvas = $("<canvas></canvas>");
-		this.canvas = this.$canvas[0];
+		this.canvas = this.model.canvas = this.$canvas[0];
 		this.ctx = this.canvas.getContext('2d');
 
 		this.$canvas.attr({ 

@@ -38,6 +38,7 @@
 			<button class="fit">fit</button>
 			<button class="undo" disabled="disabled">undo</button>
 			<button class="redo" disabled="disabled">redo</button>
+			<button class="export">export</button>
 			<br/>
 			<button class="color">#000000</button>
 			<button class="color" style="color:#ff4444">#ff4444</button>
@@ -79,6 +80,10 @@
 		});
 		v.model.bind('canvas:redo', function(disabled) {
 			$('button.redo').attr("disabled", disabled);
+		});
+
+		$('button.export').bind('click', function() {
+			v.model.export();
 		});
 
 		$('input.zoom').bind('change', function(ev) {
