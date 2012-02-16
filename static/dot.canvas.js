@@ -107,7 +107,8 @@ dot.Canvas = Backbone.Model.extend({
 		if (p.length <= aX || p[0].length <= aY) return;
 		
 		if (!ignore) {
-			p[aX][aY] = (p[aX][aY] && !drag) ? null : this.get("color");
+			p[aX][aY] = (p[aX][aY] && p[aX][aY] == this.get("color") && !drag)
+				? null : this.get("color");
 		}
 		this.set("pixel", p, { silent: drag });
 		this.trigger("canvas:update");

@@ -51,6 +51,12 @@ describe("Canvas Model", function() {
 		expect(c.get("color")).toBe("#000000");
 	});
 
+	it("브러쉬 색상을 바꾸고 그리면 덮어씌운다.", function() {
+		c.setColor("#ff0000");
+		c.point(319, 319);
+		expect(c.get("pixel")[15][15]).toBe("#ff0000");
+	});
+
 	it("데이터를 모두 삭제 한다.", function() {
 		var p, valid = null;
 		c.clearPixel(true);
