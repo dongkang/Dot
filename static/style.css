@@ -5,14 +5,9 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 
 
 .ico-clear {background:url('../images/btn_clear.png') no-repeat center center;}
-.ico-cloud {background:url('../images/btn_cloud.png') no-repeat center center;}
-.ico-config {background:url('../images/btn_config.png') no-repeat center center;}
 .ico-export {background:url('../images/btn_export.png') no-repeat center center;}
-.ico-eye {background:url('../images/btn_eye.png') no-repeat center center;}
-.ico-minus {background:url('../images/btn_minus.png') no-repeat center center;}
 .ico-move {background:url('../images/btn_move.png') no-repeat center center;}
 .ico-pen {background:url('../images/btn_pen.png') no-repeat center center;}
-.ico-plus {background:url('../images/btn_plus.png') no-repeat center center;}
 .ico-redo {background:url('../images/btn_redo.png') no-repeat center center;}
 .ico-save {background:url('../images/btn_save.png') no-repeat center center;}
 .ico-undo {background:url('../images/btn_undo.png') no-repeat center center;}
@@ -27,55 +22,28 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 .menu-bottom {border-top:1px solid #abaca7;}
 .item {display:inline-block;overflow:hidden;width:85px;height:85px;cursor:pointer;}
 .item-selected {background-color:#b8b9b3;}
-.item-spacer {width:42px;cursor:default;}
-.item-slider {width:255px;}
+.item-disabled {opacity:0.3;}
 
 
 /* low resolution phone */
 @media
 only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-.ico-clear {background-size:16px 16px;}
-.ico-cloud {background-size:16px 16px;}
-.ico-config {background-size:16px 16px;}
-.ico-export {background-size:16px 16px;}
-.ico-eye {background-size:16px 12px;}
-.ico-minus {background-size:16px 4px;}
-.ico-move {background-size:16px 16px;}
-.ico-pen {background-size:16px 16px;}
-.ico-plus {background-size:16px 16px;}
-.ico-redo {background-size:16px 16px;}
-.ico-save {background-size:16px 16px;}
-.ico-undo {background-size:16px 16px;}
+.ico-clear, .ico-export, .ico-move, .ico-pen, .ico-redo, .ico-save, .ico-undo {background-size:16px 16px}
 .ico-color span {left:13px;top:13px;width:16px;height:16px;}
 .ico-color span span {left:2px;top:2px;width:12px;height:12px;}
 .menu {height:42px;padding:0 11px;}
 .item {width:42px;height:42px;}
-.item-spacer {width:21px;}
-.item-slider {width:126px;}
 }
 
 /* high resolution phone */
 @media
 only screen and (-webkit-min-device-pixel-ratio : 1.5),
 only screen and (min-device-pixel-ratio : 1.5) {
-.ico-clear {background-size:16px 16px;}
-.ico-cloud {background-size:16px 16px;}
-.ico-config {background-size:16px 16px;}
-.ico-export {background-size:16px 16px;}
-.ico-eye {background-size:16px 12px;}
-.ico-minus {background-size:16px 4px;}
-.ico-move {background-size:16px 16px;}
-.ico-pen {background-size:16px 16px;}
-.ico-plus {background-size:16px 16px;}
-.ico-redo {background-size:16px 16px;}
-.ico-save {background-size:16px 16px;}
-.ico-undo {background-size:16px 16px;}
-.ico-color span {left:13px;top:13px;width:16px;height:16px;}
-.ico-color span span {left:2px;top:2px;width:12px;height:12px;}
-.menu {height:42px;padding:0 11px;}
-.item {width:42px;height:42px;}
-.item-spacer {width:21px;}
-.item-slider {width:126px;}
+.ico-clear, .ico-export, .ico-move, .ico-pen, .ico-redo, .ico-save, .ico-undo {background-size:24px 24px}
+.ico-color span {left:19px;top:19px;width:24px;height:24px;}
+.ico-color span span {left:3px;top:3px;width:18px;height:18px;}
+.menu {height:63px;padding:0 16px;}
+.item {width:63px;height:63px;}
 }
 
 /* pad */
