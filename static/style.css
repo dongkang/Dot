@@ -19,7 +19,7 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 .ico-clear {background-size:16px 16px;}
 .ico-cloud {background-size:16px 16px;}
 .ico-config {background-size:16px 16px;}
-.ico-export {background-size:16px 16px;}
+.ico-export {background-size:16px 12px;}
 .ico-eye {background-size:16px 12px;}
 .ico-minus {background-size:16px 4px;}
 .ico-move {background-size:16px 16px;}
@@ -66,7 +66,7 @@ only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
 .ico-clear {background-size:32px 32px;}
 .ico-cloud {background-size:32px 32px;}
 .ico-config {background-size:32px 32px;}
-.ico-export {background-size:32px 32px;}
+.ico-export {background-size:32px 24px;}
 .ico-eye {background-size:32px 24px;}
 .ico-minus {background-size:32px 8px;}
 .ico-move {background-size:32px 32px;}
