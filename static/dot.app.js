@@ -18,23 +18,6 @@ dot.Callbacks = (function(){
     };
 })();
 
-$.extend(dot, {
-
-    /* const variables */
-    MODE_DRAW: 'mode_draw',
-    MODE_VIEW: 'mode_view',
-
-    /* attributes */
-    color: '#000000',
-
-    initialize: function(){
-        //TODO: initialize application
-    },
-    action: function(value){
-        console.log(value + ' ' + this.color);
-    }
-});
-
 dot.Util = {
     cssPrefix: function() {
         var b = $.browser;
@@ -65,3 +48,12 @@ dot.Text = {
         "C_CLEAR": "Do you want clear?\nIt can't be restore!"
     }
 };
+
+$.extend(dot, {
+    initialize: function(){
+        //TODO: initialize application
+    },
+    action: function(value){
+        console.log(value + ' ' + this.color);
+    }
+});
