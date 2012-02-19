@@ -35,6 +35,9 @@ dot.Canvas = Backbone.Model.extend({
 			this.set("actualHeight", options.height);
 		}
 		this.on("change:pixel", this._stackDo);
+		this.on("change:actualWidth change:actualHeight", function() {
+			this.set("psize", this._calcPixelSize());
+		});
 		this._initPixel();
 	},
 
@@ -184,12 +187,14 @@ dot.Canvas = Backbone.Model.extend({
 	},
 
 	undo: function() {
-		var h = this.get("history");
-		if (typeof h.index === "undefined") return;
+		var h = this.get("history"),
+			p = this.get("pixel");
+
+		if (!h || typeof h.index === "undefined" || h.index <= 0) return;
 
 		this._ignoreStack = true;
 		if (h.index == h.length - 1) {
-			h.push(this.get("pixel"));
+			h.push(p);
 		} else {
 			h.index--;
 		}
@@ -255,14 +260,25 @@ dot.CanvasView = Backbone.View.extend({
 	hasHold: false,
 	hasMove: false,
 
-	initialize: function() {
+	initialize: function(options) {
 		this.model = new dot.Canvas;
 		this.model.bind("canvas:update", this.render, this);
 		this.model.bind("canvas:modechange", this.cursorChange, this);
 
+		if (this.options) {
+			this.$target = this.options.target;
+		}
+
 		this.$canvas = $("<canvas></canvas>");
 		this.canvas = this.model.canvas = this.$canvas[0];
 		this.ctx = this.canvas.getContext('2d');
+
+		if (this.$target) {
+			this.model.set({
+				actualWidth: this.$target.width(),
+				actualHeight: this.$target.height()
+			});
+		}
 
 		this.$canvas.attr({ 
 			width: this.model.get("actualWidth"), 
@@ -270,7 +286,8 @@ dot.CanvasView = Backbone.View.extend({
 			style: "cursor:crosshair"
 		});
 		$(this.el).append(this.canvas);
-		$("#app").html(this.el);
+
+		this.$target.html(this.el);
 		this.render();
 
 		/* for PC Browser */
@@ -289,7 +306,7 @@ dot.CanvasView = Backbone.View.extend({
 			gridColor = this.model.get("gridColor"),
 			offset = this.model.get("offset"),
 			cx, cy, cw, ch;
-		
+
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		for (var x=0; x<p.length; x++) {
 			for (var y=0; y<p[x].length; y++) {
