@@ -1,47 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
-	<title>Dot.</title>
-	<link href="./static/style.css" rel="stylesheet" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+<title>Dot.</title>
+<link href="./static/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <div id="main-menu" class="menu bg_light">
-        <div id="item-draw" class="item ico_pencil"></div>
-        <div id="item-view" class="item ico_hand"></div>
-        <div class="item ico_color"><span><span style="background-color:#000000;"></span></span></div>
-        <div id="item-undo" class="item ico_undo"></div>
-        <div id="item-redo" class="item ico_redo"></div>
-        <div id="item-clear" class="item ico_trash"></div>
-        <div id="item-send" class="item ico_upload"></div>
-    </div>
-    <div id="sub-menu-color" class="menu bg_dark">
-        <div class="item ico_color"><span><span style="background-color:#000000;"></span></span></div>
-        <div class="item ico_color"><span><span style="background-color:#ffffff;"></span></span></div>
-        <div class="item ico_color"><span><span style="background-color:#ff0000;"></span></span></div>
-        <div class="item ico_color"><span><span style="background-color:#ff8800;"></span></span></div>
-        <div class="item ico_color"><span><span style="background-color:#ffff00;"></span></span></div>
-        <div class="item ico_color"><span><span style="background-color:#00ff00;"></span></span></div>
-        <div class="item ico_color"><span><span style="background-color:#0000ff;"></span></span></div>
-        <div class="item ico_color"><span><span style="background-color:#ff00ff;"></span></span></div>
-    </div>
-    <div id="sub-menu-send" class="menu bg_dark">
-        <div id="item-facebook" class="item ico_facebook"></div>
-        <div id="item-twitter" class="item ico_twitter"></div>
-        <div id="item-download" class="item ico_download"></div>
-    </div>
-    <script src="./lib/jquery.js" type="text/javascript"></script>
-	<script src="./lib/underscore.js" type="text/javascript"></script>
-	<script src="./lib/backbone.js" type="text/javascript"></script>
-    <script src="./static/dot.app.js" type="text/javascript"></script>
-    <script src="./static/dot.canvas.js" type="text/javascript"></script>
+<div class="menu menu-top">
+    <div class="ico-pen item"></div>
+    <div class="ico-pen item"></div>
+    <div class="ico-pen item"></div>
+    <div class="ico-pen item"></div>
+    <div class="ico-pen item"></div>
+    <div class="ico-pen item"></div>
+    <div class="ico-pen item"></div>
+</div>
+<div class="stage">
+    <canvas></canvas>
+</div>
+<div class="menu menu-bottom">
+    <div class="ico-pen item item-selected"></div>
+    <div class="ico-move item"></div>
+    <div class="ico-color item"><span><span style="background-color:#fff;"></span></span></div>
+    <div class="ico-undo item"></div>
+    <div class="ico-redo item"></div>
+    <div class="ico-clear item"></div>
+    <div class="ico-save item"></div>
+    <div class="ico-export item"></div>
+</div>
+<div class="menu menu-bottom">
+    <div class="ico-color item"><span><span style="background-color:#fff;"></span></span></div>
+    <div class="ico-color item"><span><span style="background-color:#fff;"></span></span></div>
+    <div class="ico-color item"><span><span style="background-color:#fff;"></span></span></div>
+    <div class="ico-color item"><span><span style="background-color:#fff;"></span></span></div>
+    <div class="ico-color item"><span><span style="background-color:#fff;"></span></span></div>
+    <div class="ico-color item"><span><span style="background-color:#fff;"></span></span></div>
+    <div class="ico-color item"><span><span style="background-color:#fff;"></span></span></div>
+    <div class="ico-color item"><span><span style="background-color:#fff;"></span></span></div>
+</div>
 
-    <script type="text/javascript">
-    $(document).ready(function(){
-        window.dot.initialize();
-    });
-    </script>
-    
+<script src="./lib/jquery.js" type="text/javascript"></script>
+<script src="./lib/underscore.js" type="text/javascript"></script>
+<script src="./lib/backbone.js" type="text/javascript"></script>
+<script src="./static/dot.app.js" type="text/javascript"></script>
+<script src="./static/dot.canvas.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    window.dot.initialize();
+});
+</script>
 </body>
 </html>

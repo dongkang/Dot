@@ -3,19 +3,54 @@
 /* YUI3 CSS reset */
 html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal}ol,ul{list-style:none}caption,th{text-align:left}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}q:before,q:after{content:''}abbr,acronym{border:0;font-variant:normal}sup{vertical-align:text-top}sub{vertical-align:text-bottom}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit}input,textarea,select{*font-size:100%}legend{color:#000}
 
-.menu {display:none;overflow:hidden;position:absolute;height:62px;text-align:center;}
-.bg_light {background-color:#e7e9e1;}
-.bg_dark {background-color:#b8b9b3;}
-.item {display:inline-block;overflow:hidden;width:62px;height:62px;cursor:pointer;}
-.ico_pencil {background:url('../images/btn_pencil.png') no-repeat center center;}
-.ico_hand {background:url('../images/btn_hand.png') no-repeat center center;}
-.ico_undo {background:url('../images/btn_undo.png') no-repeat center center;}
-.ico_redo {background:url('../images/btn_redo.png') no-repeat center center;}
-.ico_trash {background:url('../images/btn_trash.png') no-repeat center center;}
-.ico_upload {background:url('../images/btn_upload.png') no-repeat center center;}
-.ico_facebook {background:url('../images/btn_facebook.png') no-repeat center center;}
-.ico_twitter {background:url('../images/btn_twitter.png') no-repeat center center;}
-.ico_download {background:url('../images/btn_download.png') no-repeat center center;}
-.ico_color {position:relative;}
-.ico_color span {position:absolute;left:16px;top:16px;width:30px;height:30px;background-color:#000;}
-.ico_color span span {position:absolute;left:5px;top:5px;width:20px;height:20px;background-color:#fff;}
+
+.ico-clear {background:url('../images/btn_clear.png') no-repeat center center;}
+.ico-export {background:url('../images/btn_export.png') no-repeat center center;}
+.ico-move {background:url('../images/btn_move.png') no-repeat center center;}
+.ico-pen {background:url('../images/btn_pen.png') no-repeat center center;}
+.ico-redo {background:url('../images/btn_redo.png') no-repeat center center;}
+.ico-save {background:url('../images/btn_save.png') no-repeat center center;}
+.ico-undo {background:url('../images/btn_undo.png') no-repeat center center;}
+
+.ico-color {position:relative;}
+.ico-color span {position:absolute;left:26px;top:26px;width:33px;height:33px;background-color:#000;}
+.ico-color span span {left:4px;top:4px;width:25px;height:25px;background-color:#fff;}
+
+.stage {border-top:1px solid #c6c7c2;border-bottom:1px solid #c6c7c2;background:#fff;}
+.menu {overflow:hidden;height:85px;padding:0 22px;background:#e7e9e1;text-align:center;}
+.menu-top {border-bottom:1px solid #abaca7;}
+.menu-bottom {border-top:1px solid #abaca7;}
+.item {display:inline-block;overflow:hidden;width:85px;height:85px;cursor:pointer;}
+.item-selected {background-color:#b8b9b3;}
+
+
+/* low resolution phone */
+@media
+only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+.ico-clear, .ico-export, .ico-move, .ico-pen, .ico-redo, .ico-save, .ico-undo {background-size:16px 16px}
+.ico-color span {left:13px;top:13px;width:16px;height:16px;}
+.ico-color span span {left:2px;top:2px;width:12px;height:12px;}
+.menu {height:42px;padding:0 11px;}
+.item {width:42px;height:42px;}
+}
+
+/* high resolution phone */
+@media
+only screen and (-webkit-min-device-pixel-ratio : 1.5),
+only screen and (min-device-pixel-ratio : 1.5) {
+.ico-clear, .ico-export, .ico-move, .ico-pen, .ico-redo, .ico-save, .ico-undo {background-size:24px 24px}
+.ico-color span {left:19px;top:19px;width:24px;height:24px;}
+.ico-color span span {left:3px;top:3px;width:18px;height:18px;}
+.menu {height:63px;padding:0 16px;}
+.item {width:63px;height:63px;}
+}
+
+/* pad */
+@media
+only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+}
+
+/* desktop */
+@media
+only screen and (min-width : 1024px) {
+}
