@@ -35,9 +35,6 @@ $.extend(dot, {
     }
 });
 
-
-
-
 dot.Util = {
     cssPrefix: function() {
         var b = $.browser;
