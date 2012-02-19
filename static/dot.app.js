@@ -44,7 +44,7 @@ dot.App = {
 
 			new dot.UI.Slider({ 
 				target: $(".menu-slider"),
-				events: {
+				handler: {
 					minus: this.zoomOut,
 					plus: this.zoomIn
 				}
@@ -80,7 +80,7 @@ dot.App = {
 		},
 
 		zoomOut: function() {
-			console.log('zoom out')
+			
 		}
 
 	})

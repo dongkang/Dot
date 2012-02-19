@@ -11,7 +11,7 @@ dot.UI.Slider = Backbone.View.extend({
 	},
 	initialize: function(options) {
 		this.$target = options.target;
-		this.events = options.events;
+		this.handler = options.handler;
 		this.render();
 	},
 	render: function() {
@@ -20,6 +20,9 @@ dot.UI.Slider = Backbone.View.extend({
 		return this;
 	},
 	minusHandler: function() {
-		this.events.minus();
+		this.handler.minus();
+	},
+	plusHandler: function() {
+		this.handler.plus();
 	}
 });
