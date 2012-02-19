@@ -4,9 +4,14 @@
 html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal}ol,ul{list-style:none}caption,th{text-align:left}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}q:before,q:after{content:''}abbr,acronym{border:0;font-variant:normal}sup{vertical-align:text-top}sub{vertical-align:text-bottom}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit}input,textarea,select{*font-size:100%}legend{color:#000}
 
 .ico-clear {background:url('../images/btn_clear.png') no-repeat center center;}
+.ico-cloud {background:url('../images/btn_cloud.png') no-repeat center center;}
+.ico-config {background:url('../images/btn_config.png') no-repeat center center;}
 .ico-export {background:url('../images/btn_export.png') no-repeat center center;}
+.ico-eye {background:url('../images/btn_eye.png') no-repeat center center;}
+.ico-minus {background:url('../images/btn_minus.png') no-repeat center center;}
 .ico-move {background:url('../images/btn_move.png') no-repeat center center;}
 .ico-pen {background:url('../images/btn_pen.png') no-repeat center center;}
+.ico-plus {background:url('../images/btn_plus.png') no-repeat center center;}
 .ico-redo {background:url('../images/btn_redo.png') no-repeat center center;}
 .ico-save {background:url('../images/btn_save.png') no-repeat center center;}
 .ico-undo {background:url('../images/btn_undo.png') no-repeat center center;}
@@ -14,7 +19,7 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 .ico-clear {background-size:16px 16px;}
 .ico-cloud {background-size:16px 16px;}
 .ico-config {background-size:16px 16px;}
-.ico-export {background-size:16px 12px;}
+.ico-export {background-size:16px 16px;}
 .ico-eye {background-size:16px 12px;}
 .ico-minus {background-size:16px 4px;}
 .ico-move {background-size:16px 16px;}
@@ -29,10 +34,11 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 .ico-color span span {left:2px;top:2px;width:12px;height:12px;background-color:#fff;}
 
 .stage {clear:both;border-top:1px solid #c6c7c2;border-bottom:1px solid #c6c7c2;background:#fff;}
-.menu {overflow:hidden;float:left;clear:both;width:294px;height:42px;padding:0 13px;text-align:center;background:#e7e9e1;}
-.menu-top {border-bottom:1px solid #abaca7;}
-.menu-bottom {border-top:1px solid #abaca7;}
-.item {overflow:hidden;float:left;width:42px;height:42px;margin:0;padding:0;cursor:pointer;}
+.menu {background:#e7e9e1;}
+.menu .inner-wrap {overflow:hidden;clear:both;width:294px;height:42px;margin:0 auto;}
+.line-bottom {border-bottom:1px solid #abaca7;}
+.line-top {border-top:1px solid #abaca7;}
+.item {overflow:hidden;float:left;width:42px;height:42px;cursor:pointer;}
 .item-selected {background-color:#b8b9b3;}
 .item-spacer {width:21px;cursor:default;}
 .item-slider {width:126px;}
@@ -57,6 +63,26 @@ only screen and (min-device-pixel-ratio : 1.5) {
 /* pad */
 @media
 only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+.ico-clear {background-size:32px 32px;}
+.ico-cloud {background-size:32px 32px;}
+.ico-config {background-size:32px 32px;}
+.ico-export {background-size:32px 32px;}
+.ico-eye {background-size:32px 24px;}
+.ico-minus {background-size:32px 8px;}
+.ico-move {background-size:32px 32px;}
+.ico-pen {background-size:32px 32px;}
+.ico-plus {background-size:32px 32px;}
+.ico-redo {background-size:32px 32px;}
+.ico-save {background-size:32px 32px;}
+.ico-undo {background-size:32px 32px;}
+
+.ico-color span {left:26px;top:26px;width:32px;height:32px;}
+.ico-color span span {left:4px;top:4px;width:24px;height:24px;}
+
+.menu .inner-wrap {width:588px;height:84px;}
+.item {width:84px;height:84px;}
+.item-spacer {width:42px;}
+.item-slider {width:252px;}
 }
 
 /* desktop */
