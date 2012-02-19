@@ -1,2 +1,20 @@
-Test deploy.
-Added new committer.
+/***************************************************
+
+	We are "grouv". contact us service@grouv.net
+
+***************************************************/
+
+
+This is a drawing tool. Code name is "Dot".
+We are Using HTML5 canvas and "Backbone.js" and so on.
+
+Concept : 
+
+	- Draw a picture using pixels. And users are sharing
+
+
+Function :
+
+	- Zoomin, Zoomout, Move
+	- Change Pixel Color
+	- Export to SNS and PC
