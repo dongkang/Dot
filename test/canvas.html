@@ -49,7 +49,7 @@
 
 	<script type="text/javascript">
 	$(document).ready(function() {
-		window.v = new dot.CanvasView();
+		window.v = new dot.CanvasView({ target: $("#app") });
 		window.grid = v.model.get('grid');
 		setTimeout(window.scrollTo, 100, 0, 1);
 

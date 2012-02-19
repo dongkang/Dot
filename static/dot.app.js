@@ -1,59 +1,114 @@
-var dot = {};
+var dot = {
+	router: {},
+	view: {},
+	canvas: {},
+};
 
-dot.Callbacks = (function(){
-    var callbacks = {}, contexts = {};
-    return function(name, context){
-        if(!callbacks[name]){
-            callbacks[name] = $.Callbacks();
-            contexts[name] = context || window;
-        }
-        return {
-            add: function(func){
-                callbacks[name].add(func);
-            },
-            fire: function(){
-                callbacks[name].fireWith.apply(this, [contexts[name]].concat(arguments));
-            }
-        };
-    };
-})();
+dot.App = {
+	initialize: function() {
+		this.router = new this._router();
+		this.view = new this._view({ model: this._model });
+
+		Backbone.history.start();
+	},
+
+	// url 컨트롤 라우터
+	_router: Backbone.Router.extend({
+		routes: {
+			"": "defaults"
+		},
+		defaults: function() {
+			
+		}
+	}),
+
+	// app 전체 model
+	_model: Backbone.Model.extend({
+
+	}),
+
+	// app 전체 view
+	_view: Backbone.View.extend({
+		el: "#app",
+		events: {
+			"click .btn_draw": "selectDraw",
+			"click .btn_move": "selectMove",
+			"click .btn_undo": "undo",
+			"click .btn_redo": "redo",
+			"click .btn_clear": "clear"
+		},
+
+		initialize: function() {
+			this.$canvas = $(".canvas");
+			dot.App.canvas = this.canvas = new dot.CanvasView({ target: this.$canvas }).model;
+
+			this.scrollTop();
+			$(window).bind("orientationchange", this.scrollTop);
+			$(window).bind("orientationchange", function(ev) {
+				alert(ev);
+				ev.preventDefault();
+			});
+		},
+
+		scrollTop: function() {
+			setTimeout(window.scrollTo, 0, 0, 1);
+		},
+
+
+		selectDraw: function() {
+			this.canvas.setHandMode(false);
+		},
+
+		selectMove: function() {
+			console.log("move!!")
+			this.canvas.setHandMode(true);
+		},
+
+		undo: function() {
+			this.canvas.undo();
+		},
+
+		redo: function() {
+			this.canvas.redo();
+		},
+
+		clear: function() {
+			this.canvas.clearPixel();
+		}
+
+	})
+
+};
+
 
 dot.Util = {
-    cssPrefix: function() {
-        var b = $.browser;
-        return (b["mozilla"] ? "moz" : b["webkit"] ? "webkit" : b["opera"] ? "opera" : "").replace(/(.*)/, "-$1-");
-    }
+	cssPrefix: function() {
+		var b = $.browser;
+		return (b["mozilla"] ? "moz" : b["webkit"] ? "webkit" : b["opera"] ? "opera" : "").replace(/(.*)/, "-$1-");
+	}
 };
+
 
 dot.Text = {
-    loc: "ko",
-    get: function(id) {
-        try {
-            return this[this.loc][id];
-        } catch(ex) {
-            return "???";
-        }
-    },
-    change: function(l) {
-        this.loc = l;
-    },
+	loc: "ko",
+	get: function(id) {
+		try {
+			return this[this.loc][id];
+		} catch(ex) {
+			return "???";
+		}
+	},
+	change: function(l) {
+		this.loc = l;
+	},
 
-    "ko": {
-        "LANGUAGE": "언어",
-        "C_CLEAR": "정말 삭제 하시겠습니까?\n이 작업은 되돌릴 수 없습니다."
-        "CANT_SAVE": "저장을 지원하지 않는 기기 입니다."
-    },
-    "en": {
-        "LANGUAGE": "Language",
-        "C_CLEAR": "Do you want clear?\nIt can't be restore!"
-    }
+	"ko": {
+		"LANGUAGE": "언어",
+		"C_CLEAR": "정말 삭제 하시겠습니까?\n이 작업은 되돌릴 수 없습니다.",
+		"CANT_SAVE": "저장을 지원하지 않는 기기 입니다."
+	},
+	"en": {
+		"LANGUAGE": "Language",
+		"C_CLEAR": "Do you want clear?\nIt can't be restore!"
+	}
 };
-
-$.extend(dot, {
-    initialize: function(){
-        //TODO: initialize application
-    },
-    action: function(value){
-        console.log(value + ' ' + this.color);
-    }
-});
