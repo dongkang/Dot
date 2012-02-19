@@ -31,23 +31,27 @@ dot.App = {
 	_view: Backbone.View.extend({
 		el: "#app",
 		events: {
-			"click .btn_draw": "selectDraw",
-			"click .btn_move": "selectMove",
-			"click .btn_undo": "undo",
-			"click .btn_redo": "redo",
-			"click .btn_clear": "clear"
+			"click .btn-draw": "selectDraw",
+			"click .btn-move": "selectMove",
+			"click .btn-undo": "undo",
+			"click .btn-redo": "redo",
+			"click .btn-clear": "clear"
 		},
 
 		initialize: function() {
 			this.$canvas = $(".canvas");
 			dot.App.canvas = this.canvas = new dot.CanvasView({ target: this.$canvas }).model;
 
+			new dot.UI.Slider({ 
+				target: $(".menu-slider"),
+				handler: {
+					minus: this.zoomOut,
+					plus: this.zoomIn
+				}
+			});
+
 			this.scrollTop();
 			$(window).bind("orientationchange", this.scrollTop);
-			$(window).bind("orientationchange", function(ev) {
-				alert(ev);
-				ev.preventDefault();
-			});
 		},
 
 		scrollTop: function() {
@@ -60,7 +64,6 @@ dot.App = {
 		},
 
 		selectMove: function() {
-			console.log("move!!")
 			this.canvas.setHandMode(true);
 		},
 
@@ -74,6 +77,10 @@ dot.App = {
 
 		clear: function() {
 			this.canvas.clearPixel();
+		},
+
+		zoomOut: function() {
+			
 		}
 
 	})
