@@ -15,30 +15,41 @@
 	<script src="./static/dot.ui.js" type="text/javascript"></script>
 	<style type="text/css">
 	#app {-webkit-tap-highlight-color:rgba(0,0,0,0);}
-	.stage {width:320px;height:320px;margin:0 auto;}
+	.stage {width:320px;height:320px;}
 
-	.ui-slider {}
+	.item-slider {width:auto;}
+	.ui-slider {float:left;}
 	.slider-less, .slider-more {float:left;width:32px;height:32px;}
-	.slider-bar {float:left;position:relative;width:245px;height:22px;padding:5px;background-color:rgb(57,45,44);}
-	.slider-point {left:0;top:0;width:22px;height:22px;background-color:#E7E9E1;}
+	.slider-bar {float:left;position:relative;width:90px;height:22px;background-color:#392D2C;border:5px solid #392D2C;}
+	.slider-point {position:absolute;left:0;top:0;width:22px;height:22px;background-color:#E7E9E1;}
 	</style>
 </head>
 <body>
 
 <div id="app">
-	<div class="menu menu-top">
-		<div class="menu-slider"></div>
+	<div class="menu line-bottom">
+		<div class="inner-wrap">
+			<div class="item item-slider"></div>
+			<div class="item item-spacer"></div>
+			<div class="item item-spacer"></div>
+			<div class="ico-config item"></div>
+		</div>
 	</div>
+
 	<div class="stage canvas"></div>
-	<div class="menu menu-bottom">
-	    <div class="ico-pen item btn-draw item-selected"></div>
-	    <div class="ico-move item btn-move"></div>
-	    <div class="ico-color item"><span><span style="background-color:#fff;"></span></span></div>
-	    <div class="ico-undo item btn-undo"></div>
-	    <div class="ico-redo item btn-redo"></div>
-	    <div class="ico-clear item btn-clear"></div>
-	    <div class="ico-save item"></div>
-	    <div class="ico-export item"></div>
+
+	<div class="menu line-top">
+		<div class="inner-wrap">
+			<div class="ico-pen item btn-draw" style="display:none;"></div>
+			<div class="ico-move item btn-move"></div>
+			<div class="ico-color item"><span><span style="background-color:#fff;"></span></span></div>
+			<div class="item item-spacer"></div>
+			<div class="ico-undo item btn-undo"></div>
+			<div class="ico-redo item btn-redo"></div>
+			<div class="item item-spacer"></div>
+			<div class="ico-clear item btn-clear"></div>
+			<div class="ico-export item"></div>
+		</div>
 	</div>
 </div>
 	

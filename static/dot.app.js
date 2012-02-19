@@ -43,10 +43,11 @@ dot.App = {
 			dot.App.canvas = this.canvas = new dot.CanvasView({ target: this.$canvas }).model;
 
 			new dot.UI.Slider({ 
-				target: $(".menu-slider"),
+				target: $(".item-slider"),
 				handler: {
-					minus: this.zoomOut,
-					plus: this.zoomIn
+					move: _.bind(this.scale, this),
+					minus: _.bind(this.zoomOut, this),
+					plus: _.bind(this.zoomIn, this)
 				}
 			});
 
@@ -79,8 +80,16 @@ dot.App = {
 			this.canvas.clearPixel();
 		},
 
+		scale: function(val) {
+			this.canvas.scale(val);
+		},
+
 		zoomOut: function() {
-			
+			this.canvas.scale(-3);
+		},
+
+		zoomIn: function() {
+			this.canvas.scale(3);
 		}
 
 	})
