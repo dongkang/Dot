@@ -61,6 +61,7 @@ dot.Text = {
     "ko": {
         "LANGUAGE": "언어",
         "C_CLEAR": "정말 삭제 하시겠습니까?\n이 작업은 되돌릴 수 없습니다."
+        "CANT_SAVE": "저장을 지원하지 않는 기기 입니다."
     },
     "en": {
         "LANGUAGE": "Language",

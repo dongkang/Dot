@@ -91,6 +91,10 @@ dot.Canvas = Backbone.Model.extend({
 		this.trigger("canvas:redo", true);
 	},
 
+	_saveLocal: function() {
+		
+	},
+
 	_clearHistory: function() {
 		this.set("history", new Array);
 		this.trigger("canvas:undo", true);
@@ -218,8 +222,21 @@ dot.Canvas = Backbone.Model.extend({
 		this.trigger("canvas:update");
 	},
 
-	export: function() {
-		window.open(this._getImageData());
+	exports: function() {
+		var data,
+			currentGrid = this.get("grid");
+		
+		this.setGridMode(false);
+		this.fit();
+		data = this._getImageData();
+		this.setGridMode(currentGrid);
+
+		if (data) {
+			return data;
+		} else {
+			alert(dot.Text.get("CANT_SAVE"));
+			return false;
+		}
 	}
 
 });
