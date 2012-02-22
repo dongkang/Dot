@@ -88,16 +88,29 @@ dot.UI.Slider = Backbone.View.extend({
 	}
 });
 
-
-
+/* colorPicker 컴포넌트 */
 dot.UI.ColorPicker = function(container, cellSize){
 	
-	var ROW_COUNT = 7;
-	var canvas = document.createElement("canvas");
-	container.appendChild(canvas)
+	/* 
 
-	var	graphic = canvas.getContext("2d");
-	var colorTable = [
+	sample code
+
+	var colorPicker = new dot.UI.ColorPicker(document.body, 15);
+	$(colorPicker).on("selected", function(e, color){
+
+		console.log(color);
+	})
+
+	*/
+
+	var ROW_COUNT = 7;
+	var that = this;
+	var _canvas = document.createElement("canvas");
+	container.appendChild(_canvas)
+
+	var	_graphic = _canvas.getContext("2d");
+	var _cellSize = cellSize;
+	var _colorTable = [
 
 		// col 1
 		'#ff0000', '#ffd8d8', '#ffa7a7', '#f15f5f', '#cc3d3d', '#980000', '#670000',
@@ -118,35 +131,50 @@ dot.UI.ColorPicker = function(container, cellSize){
 
 	];
 
-	this.init = function(container, cellSize) {
+	init();
 
-		for(var i = 0; i < colorTable.length; i++){
+	function init() {
+
+		for(var i = 0; i < _colorTable.length; i++){
 
 			var colPosition = parseInt( i / ROW_COUNT );
 			var rowPosition = parseInt( i % ROW_COUNT );
-			graphic.beginPath();
-			graphic.rect( colPosition * ( cellSize+1 ), rowPosition * (cellSize+1), cellSize, cellSize );
-			graphic.fillStyle = colorTable[i];
-			graphic.fill();
+
+			_graphic.beginPath();
+			_graphic.rect( colPosition * ( _cellSize+1 ), rowPosition * (_cellSize+1), _cellSize, _cellSize );
+			_graphic.fillStyle = _colorTable[i];
+			_graphic.fill();
 
 		}
+
+		$(_canvas).bind("click", cellClickHandler);
+	
+	};
+
+	function cellClickHandler(e){
 		
-		$(canvas).on("click", function(e){
-		
-			var localX = e.offsetX;
-			var localY = e.offsetY;
+		var localX = e.offsetX;
+		var localY = e.offsetY;
 
-			for(var i = 0; i < colorTable.length; i++){
+		for(var i = 0; i < _colorTable.length; i++){
 
-				var colPosition = parseInt( i / ROW_COUNT );
-				var rowPosition = parseInt( i % ROW_COUNT );
+			var colPosition = parseInt( i / ROW_COUNT );
+			var rowPosition = parseInt( i % ROW_COUNT );
 
-				var posX = colPosition * ( cellSize+1 );
-				var posY = rowPosition * ( cellSize+1 );
+			var posX = colPosition * ( _cellSize+1 );
+			var posY = rowPosition * ( _cellSize+1 );
+
+			if(localX > posX && localX < posX + _cellSize) {
+
+				if(localY > posY && localY < posY + _cellSize) {
+
+					var color = _colorTable[i];
+					$(that).trigger("selected", color);
+					return;
+				}
 			}
-		});
+		}
 	}
-
-	this.init(container, cellSize);
+	
 }
 
