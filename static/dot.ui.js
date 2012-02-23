@@ -40,12 +40,12 @@ dot.UI.Slider = Backbone.View.extend({
 		return this;
 	},
 	minusHandler: function() {
-		var v = Math.max(0, this.value - 10);
+		var v = Math.max(0, this.value - Math.floor(this.max/10));
 		this.goByValue(v);
 		this.value = v;
 	},
 	plusHandler: function() {
-		var v = Math.min(this.value + 10, this.max);
+		var v = Math.min(this.value + Math.floor(this.max/10), this.max);
 		this.goByValue(v);
 		this.value = v;
 	},
