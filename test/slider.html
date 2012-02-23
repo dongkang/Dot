@@ -36,8 +36,8 @@
 			value: 25
 		});
 
-		s.on("change", function(val) {
-			$("#val").html(val);
+		s.on("change", function(val, diff) {
+			$("#val").html(val + " / " + diff);
 		});
 
 	});

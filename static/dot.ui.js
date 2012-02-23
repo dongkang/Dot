@@ -40,10 +40,14 @@ dot.UI.Slider = Backbone.View.extend({
 		return this;
 	},
 	minusHandler: function() {
-		this.goByValue(this.value = Math.max(0, this.value - 10));
+		var v = Math.max(0, this.value - 10);
+		this.goByValue(v);
+		this.value = v;
 	},
 	plusHandler: function() {
-		this.goByValue(this.value = Math.min(this.value + 10, this.max));
+		var v = Math.min(this.value + 10, this.max);
+		this.goByValue(v);
+		this.value = v;
 	},
 	handle: function(ev) {
 		var e = (ev.originalEvent.touches && ev.originalEvent.touches[0]) ? 
@@ -84,15 +88,18 @@ dot.UI.Slider = Backbone.View.extend({
 	},
 
 	go: function(x) {
-		var px = Math.round(x - this.$point.width()/2);
+		var px = Math.round(x - this.$point.width()/2),
+			diff = 0;
 		px = Math.max(0, px);
 		px = Math.min(px, this.$bar.width() - this.$point.width());
 
 		this.$point.css({
 			left: px
 		});
+
+		diff = this.xToValue(px) - this.value;
 		this.value = this.xToValue(px);
-		this.trigger("change", this.value);
+		this.trigger("change", this.value, diff);
 	},
 
 	goByValue: function(val) {
