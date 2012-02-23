@@ -17,21 +17,22 @@ dot.UI.Slider = Backbone.View.extend({
 	hasMove: false,
 
 	initialize: function(options) {
+		this.max = options.max || 100;
+		this.value = options.value || 0;
 		this.$target = options.target;
-		this.handler = options.handler;
 		this.render();
 
 		this.$point = $(".slider-point", this.$el);
+		this.$bar = $(".slider-bar", this.$el);
+		this.goByValue(this.value);
 
 		/* for PC Browser */
 		if (!this.hasTouchEvent) {
 			this.events["mousedown .slider-bar"] = "handle";
 			this.events["mousemove .slider-bar"] = "handle";
 			this.events["mouseup .slider-bar"] = "handle";
-			this.events["mouseout .slider-bar"] = "handle";
 		}
 		this.delegateEvents(this.events);
-
 	},
 	render: function() {
 		this.setElement(this.template);
@@ -39,24 +40,24 @@ dot.UI.Slider = Backbone.View.extend({
 		return this;
 	},
 	minusHandler: function() {
-		this.handler.minus();
+		this.goByValue(this.value = Math.max(0, this.value - 10));
 	},
 	plusHandler: function() {
-		this.handler.plus();
+		this.goByValue(this.value = Math.min(this.value + 10, this.max));
 	},
 	handle: function(ev) {
 		var e = (ev.originalEvent.touches && ev.originalEvent.touches[0]) ? 
 					ev.originalEvent.touches[0] : ev,
-			offset = $(".slider-bar").offset(),
+			offset = this.$bar.offset(),
 			x = (e.pageX || this.lastX) - offset.left,
 			y = (e.pageY || this.lastY) - offset.left;
 
 		ev.preventDefault();
-		ev.stopPropagation();
 
 		switch (ev.type) {
 			case "touchstart":
 			case "mousedown":
+				this.go(x);
 				this.hasHold = true;
 				this.hasMove = false;
 				this.lastX = x;
@@ -67,10 +68,7 @@ dot.UI.Slider = Backbone.View.extend({
 			case "mousemove":
 				if (this.hasHold) {
 					this.hasMove = true;
-					console.log(this.$point)
-					this.$point.css({
-						left: x
-					});
+					this.go(x);
 				}
 				this.lastX = x;
 				this.lastY = y;
@@ -78,13 +76,37 @@ dot.UI.Slider = Backbone.View.extend({
 
 			case "touchend":
 			case "mouseup":
-			case "mouseout":
-				this.hasHold = false;
-				this.hasMove = false;
+				this.hasMove = this.hasHold = false;
 				break;
 
 			default: return;
 		}
+	},
+
+	go: function(x) {
+		var px = Math.round(x - this.$point.width()/2);
+		px = Math.max(0, px);
+		px = Math.min(px, this.$bar.width() - this.$point.width());
+
+		this.$point.css({
+			left: px
+		});
+		this.value = this.xToValue(px);
+		this.trigger("change", this.value);
+	},
+
+	goByValue: function(val) {
+		this.go(this.valueToX(val) + (this.$point.width()/2));
+	},
+
+	xToValue: function(px) {
+		var ratio = this.max / (this.$bar.width() - this.$point.width());
+		return Math.floor(px * ratio);
+	},
+
+	valueToX: function(val) {
+		var ratio = (this.$bar.width() - this.$point.width()) / this.max;
+		return Math.floor(val * ratio);
 	}
 });
 
