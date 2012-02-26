@@ -42,14 +42,11 @@ dot.App = {
 			this.$canvas = $(".canvas");
 			dot.App.canvas = this.canvas = new dot.CanvasView({ target: this.$canvas }).model;
 
-			new dot.UI.Slider({ 
+			this.slider = new dot.UI.Slider({ 
 				target: $(".item-slider"),
-				handler: {
-					move: _.bind(this.scale, this),
-					minus: _.bind(this.zoomOut, this),
-					plus: _.bind(this.zoomIn, this)
-				}
-			});
+				max: 10,
+				value: 5
+			}).on("change", $.proxy(this.scale, this));
 
 			this.scrollTop();
 			$(window).bind("orientationchange", this.scrollTop);
@@ -80,18 +77,9 @@ dot.App = {
 			this.canvas.clearPixel();
 		},
 
-		scale: function(val) {
-			this.canvas.scale(val);
-		},
-
-		zoomOut: function() {
-			this.canvas.scale(-3);
-		},
-
-		zoomIn: function() {
-			this.canvas.scale(3);
+		scale: function(val, diff) {
+			this.canvas.scale(diff);
 		}
-
 	})
 
 };
