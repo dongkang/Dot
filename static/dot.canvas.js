@@ -17,6 +17,7 @@ dot.Canvas = Backbone.Model.extend({
 		actualWidth: 320,
 		actualHeight: 320,
 		psize: {},
+		csize: {},
 		offset: {
 			x: 0,
 			y: 0
@@ -30,14 +31,14 @@ dot.Canvas = Backbone.Model.extend({
 	},
 
 	initialize: function(options) {
-		if (options) {
-			this.set("actualWidth", options.width);
-			this.set("actualHeight", options.height);
-		}
 		this.on("change:pixel", this._stackDo);
-		this.on("change:actualWidth change:actualHeight", function() {
+		this.on("change:width change:height change:actualWidth change:actualHeight", function() {
 			this.set("psize", this._calcPixelSize());
 		});
+		if (options) {
+			this.set("width", options.width);
+			this.set("height", options.height);
+		}
 		this._initPixel();
 	},
 
@@ -185,6 +186,22 @@ dot.Canvas = Backbone.Model.extend({
 		this.trigger("canvas:update");
 	},
 
+	origin: function() {
+		var ratio = this.get("width") / this.defaults.width,
+			aw = this.get("csize").width * ratio,
+			ah = this.get("csize").height * ratio,
+			ox = (aw - this.get("csize").width) / -2,
+			oy = (ah - this.get("csize").height) / -2;
+
+		this.set({
+			actualWidth: aw,
+			actualHeight: ah,
+			offset: { x: ox , y: oy }
+		});
+		this.set("psize", this._calcPixelSize());
+		this.trigger("canvas:update");
+	},
+
 	undo: function() {
 		var h = this.get("history"),
 			p = this.get("pixel");
@@ -260,22 +277,27 @@ dot.CanvasView = Backbone.View.extend({
 	hasMove: false,
 
 	initialize: function(options) {
-		this.model = new dot.Canvas;
+		options = options || {};
+		this.model = new dot.Canvas({
+			width: options.width,
+			height: options.height
+		});
 		this.model.bind("canvas:update", this.render, this);
 		this.model.bind("canvas:modechange", this.cursorChange, this);
-
-		if (this.options) {
-			this.$target = this.options.target;
-		}
 
 		this.$canvas = $("<canvas></canvas>");
 		this.canvas = this.model.canvas = this.$canvas[0];
 		this.ctx = this.canvas.getContext('2d');
 
-		if (this.$target) {
+		if (options.target) {
+			this.$target = $(options.target);
 			this.model.set({
 				actualWidth: this.$target.width(),
-				actualHeight: this.$target.height()
+				actualHeight: this.$target.height(),
+				csize: {
+					width: this.$target.width(),
+					height: this.$target.height()
+				}
 			});
 		}
 
@@ -287,7 +309,7 @@ dot.CanvasView = Backbone.View.extend({
 		$(this.el).append(this.canvas);
 
 		this.$target.html(this.el);
-		this.render();
+		this.model.origin();
 
 		/* for PC Browser */
 		if (!this.hasTouchEvent) {

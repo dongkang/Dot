@@ -40,12 +40,16 @@ dot.App = {
 
 		initialize: function() {
 			this.$canvas = $(".canvas");
-			dot.App.canvas = this.canvas = new dot.CanvasView({ target: this.$canvas }).model;
+			dot.App.canvas = this.canvas = new dot.CanvasView({ 
+				target: this.$canvas,
+				width: 48,
+				height: 48
+			}).model;
 
 			this.slider = new dot.UI.Slider({ 
 				target: $(".item-slider"),
-				max: 10,
-				value: 5
+				max: 128,
+				value: 64
 			}).on("change", $.proxy(this.scale, this));
 
 			this.scrollTop();

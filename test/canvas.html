@@ -62,12 +62,16 @@
 	$(document).ready(function() {
 		setTimeout(window.scrollTo, 100, 0, 1);
 
-		window.v = new dot.CanvasView({ target: $("#app") });
+		window.v = new dot.CanvasView({ 
+			target: $("#app"),
+			width: 48,
+			height: 48
+		});
 		window.grid = v.model.get('grid');
 		window.slider = new dot.UI.Slider({ 
 			target: $(".item-slider"),
-			max: 10,
-			value: 5
+			max: 320*0.4,
+			value: 320*0.4/2
 		});
 
 		$('button.clear').bind('click', function() {
