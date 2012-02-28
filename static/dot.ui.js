@@ -118,11 +118,11 @@ dot.UI.Slider = Backbone.View.extend({
 });
 
 /* colorPicker 컴포넌트 */
-dot.UI.ColorPicker = function(container, cellSize){
+dot.UI.ColorPicker = function(container, width, height){
 	
 	/* 
 
-	sample code
+	// sample code init
 
 	var colorPicker = new dot.UI.ColorPicker(document.body, 15);
 	$(colorPicker).on("selected", function(e, color){
@@ -130,15 +130,20 @@ dot.UI.ColorPicker = function(container, cellSize){
 		console.log(color);
 	})
 
+	// sample code render
+
+	colorPicker.render(width, height);
+
 	*/
 
 	var ROW_COUNT = 7;
+	var COL_COUNT = 14;
+	
 	var that = this;
 	var _canvas = document.createElement("canvas");
 	container.appendChild(_canvas)
 
 	var	_graphic = _canvas.getContext("2d");
-	var _cellSize = cellSize;
 	var _colorTable = [
 
 		// col 1
@@ -160,56 +165,39 @@ dot.UI.ColorPicker = function(container, cellSize){
 
 	];
 
-	init();
+	this.init = function(width, height) {
 
-	function init() {
+		this.render(width, height);
+		$(_canvas).bind("click", function(e){
 
+			var localX = e.offsetX;
+			var localY = e.offsetY;
+
+			var imageData = _graphic.getImageData(localX, localY, 1, 1);
+			var color = "#" + imageData.data[0].toString(16) + imageData.data[1].toString(16) + imageData.data[2].toString(16);
+			$(that).trigger("selected", color);
+
+		});
+	}
+
+	this.render = function(width, height) {
+
+		var _wcellSize = parseInt(width/COL_COUNT);
+		var _hcellSize = parseInt(height/ROW_COUNT);
+	
 		for(var i = 0; i < _colorTable.length; i++){
 
 			var colPosition = parseInt( i / ROW_COUNT );
 			var rowPosition = parseInt( i % ROW_COUNT );
 
 			_graphic.beginPath();
-			_graphic.rect(colPosition * _cellSize, rowPosition * _cellSize, _cellSize, _cellSize);
+			_graphic.rect(colPosition * _wcellSize, rowPosition * _hcellSize, _wcellSize, _hcellSize);
 			_graphic.fillStyle = _colorTable[i];
 			_graphic.fill();
 
 		}
-
-		$(_canvas).bind("click", cellClickHandler);
-	
-	};
-
-	function cellClickHandler(e){
-		
-		var localX = e.offsetX;
-		var localY = e.offsetY;
-
-		var imageData = _graphic.getImageData(localX, localY, 1, 1);
-		var color = "#" + imageData.data[0].toString(16) + imageData.data[1].toString(16) + imageData.data[2].toString(16);
-		$(that).trigger("selected", color);
-		
-		/*
-		for(var i = 0; i < _colorTable.length; i++){
-
-			var colPosition = parseInt( i / ROW_COUNT );
-			var rowPosition = parseInt( i % ROW_COUNT );
-
-			var posX = colPosition * ( _cellSize+1 );
-			var posY = rowPosition * ( _cellSize+1 );
-
-			if(localX > posX && localX < posX + _cellSize) {
-
-				if(localY > posY && localY < posY + _cellSize) {
-
-					var color = _colorTable[i];
-					$(that).trigger("selected", color);
-					return;
-				}
-			}
-		}
-		*/
 	}
 	
+	this.init(width, height);
 }
 
