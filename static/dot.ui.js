@@ -170,7 +170,7 @@ dot.UI.ColorPicker = function(container, cellSize){
 			var rowPosition = parseInt( i % ROW_COUNT );
 
 			_graphic.beginPath();
-			_graphic.rect( colPosition * ( _cellSize+1 ), rowPosition * (_cellSize+1), _cellSize, _cellSize );
+			_graphic.rect(colPosition * _cellSize, rowPosition * _cellSize, _cellSize, _cellSize);
 			_graphic.fillStyle = _colorTable[i];
 			_graphic.fill();
 
@@ -185,6 +185,11 @@ dot.UI.ColorPicker = function(container, cellSize){
 		var localX = e.offsetX;
 		var localY = e.offsetY;
 
+		var imageData = _graphic.getImageData(localX, localY, 1, 1);
+		var color = "#" + imageData.data[0].toString(16) + imageData.data[1].toString(16) + imageData.data[2].toString(16);
+		$(that).trigger("selected", color);
+		
+		/*
 		for(var i = 0; i < _colorTable.length; i++){
 
 			var colPosition = parseInt( i / ROW_COUNT );
@@ -203,6 +208,7 @@ dot.UI.ColorPicker = function(container, cellSize){
 				}
 			}
 		}
+		*/
 	}
 	
 }
