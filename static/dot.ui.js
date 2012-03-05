@@ -141,7 +141,7 @@ dot.UI.ColorPicker = function(container, width, height){
 	
 	var that = this;
 	var _canvas = document.createElement("canvas");
-	container.appendChild(_canvas)
+	container.appendChild(_canvas);
 
 	var	_graphic = _canvas.getContext("2d");
 	var _colorTable = [
@@ -168,13 +168,18 @@ dot.UI.ColorPicker = function(container, width, height){
 	this.init = function(width, height) {
 
 		this.render(width, height);
-		$(_canvas).bind("click", function(e){
+		this.$canvas = $(_canvas);
+
+		this.$canvas.bind("click", function(e){
 
 			var localX = e.offsetX;
 			var localY = e.offsetY;
 
 			var imageData = _graphic.getImageData(localX, localY, 1, 1);
-			var color = "#" + imageData.data[0].toString(16) + imageData.data[1].toString(16) + imageData.data[2].toString(16);
+			var cr = imageData.data[0].toString(16).replace(/^(.)$/, "0$1"),
+				cg = imageData.data[1].toString(16).replace(/^(.)$/, "0$1"),
+				cb = imageData.data[2].toString(16).replace(/^(.)$/, "0$1");
+			var color = "#" + cr + cg + cb;
 			$(that).trigger("selected", color);
 
 		});
@@ -182,13 +187,13 @@ dot.UI.ColorPicker = function(container, width, height){
 
 	this.render = function(width, height) {
 
-		var _wcellSize = parseInt(width/COL_COUNT);
-		var _hcellSize = parseInt(height/ROW_COUNT);
+		var _wcellSize = width/COL_COUNT;
+		var _hcellSize = height/ROW_COUNT;
 	
 		for(var i = 0; i < _colorTable.length; i++){
 
-			var colPosition = parseInt( i / ROW_COUNT );
-			var rowPosition = parseInt( i % ROW_COUNT );
+			var colPosition = parseInt(i / ROW_COUNT);
+			var rowPosition = i % ROW_COUNT;
 
 			_graphic.beginPath();
 			_graphic.rect(colPosition * _wcellSize, rowPosition * _hcellSize, _wcellSize, _hcellSize);
