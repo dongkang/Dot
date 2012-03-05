@@ -22,6 +22,8 @@
 	.slider-less, .slider-more {float:left;width:32px;height:32px;}
 	.slider-bar {float:left;position:relative;width:90px;height:22px;background-color:#392D2C;border:5px solid #392D2C;}
 	.slider-point {position:absolute;left:0;top:0;width:22px;height:22px;background-color:#E7E9E1;}
+
+	.color-wrap {position:relative;}
 	</style>
 </head>
 <body>
@@ -37,15 +39,15 @@
 	</div>
 
 	<div class="stage canvas"></div>
+	<div class="color-wrap"></div>
 
 	<div class="menu line-top">
 		<div class="inner-wrap">
-			<div class="ico-pen item btn-draw" style="display:none;"></div>
-			<div class="ico-move item btn-move"></div>
-			<div class="ico-color item"><span><span style="background-color:#fff;"></span></span></div>
+			<div class="mode-toggle ico-move item btn-move"></div>
+			<div class="ico-color item btn-color"><span><span class="current-color" style="background-color:#000;box-shadow:inset 0 0 1px rgba(255,255,255,0.7);"></span></span></div>
 			<div class="item item-spacer"></div>
-			<div class="ico-undo item btn-undo"></div>
-			<div class="ico-redo item btn-redo"></div>
+			<div class="ico-undo item btn-undo disabled"></div>
+			<div class="ico-redo item btn-redo disabled"></div>
 			<div class="item item-spacer"></div>
 			<div class="ico-clear item btn-clear"></div>
 			<div class="ico-export item"></div>

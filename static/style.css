@@ -5,6 +5,8 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 * {-webkit-tap-highlight-color:rgba(0,0,0,0);}
 body {-webkit-text-size-adjust:none;}
 
+.hide {display:none !important;}
+
 .ico-clear {background:url('../images/btn_clear.png') no-repeat center center;}
 .ico-cloud {background:url('../images/btn_cloud.png') no-repeat center center;}
 .ico-config {background:url('../images/btn_config.png') no-repeat center center;}
@@ -35,15 +37,18 @@ body {-webkit-text-size-adjust:none;}
 .ico-color span {position:absolute;left:13px;top:13px;width:16px;height:16px;background-color:#000;}
 .ico-color span span {left:2px;top:2px;width:12px;height:12px;background-color:#fff;}
 
-.stage {clear:both;border-top:1px solid #c6c7c2;border-bottom:1px solid #c6c7c2;background:#fff;}
+.stage {clear:both;position:relative;margin:0 auto;border-top:1px solid #c6c7c2;border-bottom:1px solid #c6c7c2;background:#fff;}
+.stage canvas {vertical-align:top;}
 .menu {background:#e7e9e1;}
 .menu .inner-wrap {overflow:hidden;clear:both;width:294px;height:42px;margin:0 auto;}
+.menu .disabled {opacity:0.3;cursor:default;}
 .line-bottom {border-bottom:1px solid #abaca7;}
 .line-top {border-top:1px solid #abaca7;}
 .item {overflow:hidden;float:left;width:42px;height:42px;cursor:pointer;}
 .item-selected {background-color:#b8b9b3;}
 .item-spacer {width:21px;cursor:default;}
 .item-slider {width:126px;}
+.color-picker {position:absolute;bottom:0;left:0;background-color:#fff;}
 
 /* for iphone */
 @media

@@ -31,12 +31,17 @@ dot.App = {
 	_view: Backbone.View.extend({
 		el: "#app",
 		events: {
-			"click .btn-draw": "selectDraw",
-			"click .btn-move": "selectMove",
+			"click .mode-toggle": "toggleMode",
+			"click .btn-color": "toggleColor",
 			"click .btn-undo": "undo",
 			"click .btn-redo": "redo",
 			"click .btn-clear": "clear"
 		},
+
+		$canvas: null,
+		canvas: null,
+		slider: null,
+		colorPicker: null,
 
 		initialize: function() {
 			this.$canvas = $(".canvas");
@@ -46,34 +51,67 @@ dot.App = {
 				height: 48
 			}).model;
 
+			this.initInterface();
+			this.initUndoEvent();
+			this.scrollTop();
+			$(window).bind("orientationchange", this.scrollTop);
+		},
+
+		initInterface: function() {
 			this.slider = new dot.UI.Slider({ 
 				target: $(".item-slider"),
 				max: 128,
 				value: 64
 			}).on("change", $.proxy(this.scale, this));
 
-			this.scrollTop();
-			$(window).bind("orientationchange", this.scrollTop);
+			this.colorPicker = new dot.UI.ColorPicker($(".stage")[0], 15);
+			this.colorPicker.$canvas
+				.attr({ 
+					width:this.$canvas.width(), 
+					height:this.$canvas.width() * 0.5 
+				})
+				.addClass("color-picker hide");
+			this.colorPicker.render(this.$canvas.width(), this.$canvas.width() * 0.5);
+			$(this.colorPicker).on("selected", $.proxy(this.selectColor, this));
 		},
 
 		scrollTop: function() {
 			setTimeout(window.scrollTo, 0, 0, 1);
 		},
 
-
-		selectDraw: function() {
-			this.canvas.setHandMode(false);
+		toggleMode: function(ev) {
+			var $el = $(ev.target);
+			if ($el.hasClass("btn-move")) {
+				$el.removeClass("btn-move").removeClass("ico-move")
+					.addClass("btn-draw").addClass("ico-pen");
+				this.canvas.setHandMode(true);
+			} else {
+				$el.removeClass("btn-draw").removeClass("ico-pen")
+					.addClass("btn-move").addClass("ico-move");
+				this.canvas.setHandMode(false);
+			}
 		},
 
-		selectMove: function() {
-			this.canvas.setHandMode(true);
+		toggleColor: function(ev) {
+			this.colorPicker.$canvas.toggleClass("hide");
 		},
 
-		undo: function() {
+		initUndoEvent: function() {
+			this.canvas.on("canvas:undo", function(isDisable) {
+				$(".btn-undo").toggleClass("disabled", isDisable);
+			});
+			this.canvas.on("canvas:redo", function(isDisable) {
+				$(".btn-redo").toggleClass("disabled", isDisable);
+			});
+		},
+
+		undo: function(ev) {
+			if ($(ev.target).hasClass("disabled")) return;
 			this.canvas.undo();
 		},
 
-		redo: function() {
+		redo: function(ev) {
+			if ($(ev.target).hasClass("disabled")) return;
 			this.canvas.redo();
 		},
 
@@ -83,9 +121,16 @@ dot.App = {
 
 		scale: function(val, diff) {
 			this.canvas.scale(diff);
+		},
+
+		selectColor: function(ev, color) {
+			this.colorPicker.$canvas.toggleClass("hide");
+			this.canvas.setColor(color);
+			$(".current-color", this.$el).css({
+				backgroundColor: color
+			});
 		}
 	})
-
 };
 
 
