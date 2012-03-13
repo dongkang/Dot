@@ -168,10 +168,12 @@ dot.Canvas = Backbone.Model.extend({
 	},
 
 	move: function(x, y) {
-		var o = this.get("offset");
+		var o = this.get("offset"),
+			csize = this.get("csize");
+
 		this.set("offset", {
-			x: o.x + x,
-			y: o.y + y
+			x: Math.max(Math.min(o.x + x, 0), csize.width - this.get("actualWidth")),
+			y: Math.max(Math.min(o.y + y, 0), csize.height - this.get("actualHeight"))
 		});
 		this.trigger("canvas:update");
 	},
