@@ -10,6 +10,7 @@ dot.App = {
 		this.view = new this._view({ model: this._model });
 
 		Backbone.history.start();
+		dot.Util.fullscreen();
 	},
 
 	// url 컨트롤 라우터
@@ -138,6 +139,15 @@ dot.Util = {
 	cssPrefix: function() {
 		var b = $.browser;
 		return (b["mozilla"] ? "moz" : b["webkit"] ? "webkit" : b["opera"] ? "opera" : "").replace(/(.*)/, "-$1-");
+	},
+
+	fullscreen: function() {
+		setTimeout(window.scrollTo, 100, 0, 1);
+		setTimeout(function() {
+			if ($("body").height() > window.innerHeight) {
+				$("body").css("min-height", window.innerHeight);
+			}
+		}, 300);
 	}
 };
 
