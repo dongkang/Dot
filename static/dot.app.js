@@ -55,6 +55,9 @@ dot.App = {
 			this.initInterface();
 			this.initUndoEvent();
 			this.scrollTop();
+			setTimeout($.proxy(function() {
+				this.verticalAlign();
+			}, this), 500);
 			$(window).bind("orientationchange", this.scrollTop);
 		},
 
@@ -74,6 +77,20 @@ dot.App = {
 				.addClass("color-picker hide");
 			this.colorPicker.render(this.$canvas.width(), this.$canvas.width() * 0.5);
 			$(this.colorPicker).on("selected", $.proxy(this.selectColor, this));
+		},
+
+		verticalAlign: function() {
+			var menuHeight = 0,
+				margin;
+
+			$(".menu").each(function(i, el) {
+				menuHeight += $(el).height();
+			});
+			margin = Math.round((window.innerHeight - menuHeight - this.$canvas.height()) * 0.5) - 2;
+			this.$canvas.css({
+				"margin-top": margin,
+				"margin-bottom": margin
+			});
 		},
 
 		scrollTop: function() {
