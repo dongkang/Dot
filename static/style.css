@@ -19,6 +19,7 @@ body {-webkit-text-size-adjust:none;}
 .ico-redo {background:url('../images/btn_redo.png') no-repeat center center;}
 .ico-save {background:url('../images/btn_save.png') no-repeat center center;}
 .ico-undo {background:url('../images/btn_undo.png') no-repeat center center;}
+.ico-accountlink {background:url('../images/btn_accountlink.png') no-repeat center center;}
 
 .ico-clear {background-size:16px 16px;}
 .ico-cloud {background-size:16px 16px;}
@@ -32,6 +33,7 @@ body {-webkit-text-size-adjust:none;}
 .ico-redo {background-size:16px 16px;}
 .ico-save {background-size:16px 16px;}
 .ico-undo {background-size:16px 16px;}
+.ico-accountlink {background-size:32px 32px;}
 
 .ico-color {position:relative;}
 .ico-color span {position:absolute;left:13px;top:13px;width:16px;height:16px;background-color:#000;}
@@ -49,6 +51,13 @@ body {-webkit-text-size-adjust:none;}
 .item-spacer {width:21px;cursor:default;}
 .item-slider {width:126px;}
 .color-picker {position:absolute;bottom:0;left:0;background-color:#fff;}
+
+.account {background-color:#e7e9e1;}
+.account-title {height:100px;line-height:100px;background-color:#b8b9b3;color:#4b4b49;font-family:Helvetica,sans-serif;font-size:40pt;font-weight:bold;text-align:center;}
+.account-item {position:relative;height:100px;line-height:100px;padding:0 102px 0 35px;border-bottom:1px solid #949590;}
+.account-type {display:inline-block;color:#4b4b49;font-family:Helvetica,sans-serif;font-size:35pt;}
+.account-name {display:inline-block;color:#949590;font-family:Helvetica,sans-serif;font-size:25pt;margin-left:20px;}
+.account-link {position:absolute;top:0;right:0;width:102px;height:100px;cursor:pointer;}
 
 /* for iphone */
 @media
